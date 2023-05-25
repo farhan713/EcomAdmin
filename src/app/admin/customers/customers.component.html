@@ -1,0 +1,51 @@
+<div class="p-1">
+    <mat-card class="p-0"> 
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Grouped Synonym</h2>  
+            <button mat-raised-button color="primary" (click)="openCustomerDialog(null)">Add Synonym</button>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-table admin-table" >
+            <div class="mat-header-row mat-header-cell">Searching for any keyword in the group returns the same result for all keywords</div>
+            <!-- <div class="mat-header-row" >
+                
+                <div class="mat-header-cell"></div>
+                <div class="mat-header-cell"></div>
+            </div> -->
+            <!-- <div *ngFor="let customer of customers | paginate: { itemsPerPage: count, currentPage: page }" class="mat-row"> -->
+                <div *ngFor="let Synonym of synonymsData" class="mat-row">
+                <!-- <div class="mat-cell">{{customer.firstName}} {{customer.lastName}}</div> -->
+                <div class="mat-cell">{{Synonym.synonyms}} </div>
+              
+                <!-- <div class="mat-cell">{{customer.username}}</div>
+                <div class="mat-cell">{{customer.email}}</div>
+                <div class="mat-cell">{{ ( stores | filterById : customer.storeId )?.name }}</div> 
+                <div class="mat-cell">${{customer.walletBalance.toFixed(2)}}</div>
+                <div class="mat-cell">${{customer.revenue.toFixed(2)}}</div>      -->
+                <div class="mat-cell">
+                    <!-- <div class="mat-cell check-box-new" >
+                        <mat-checkbox color="primary"   (change)="changeStatus(setting.id)"></mat-checkbox>
+                       
+                    </div>  -->
+                    <div class="p-1 actions">     
+                        <mat-checkbox color="primary"  [checked]="Synonym.status" (change)="changeStatus(Synonym)"></mat-checkbox>     
+                        <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openCustomerDialog(Synonym)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(Synonym)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>      
+            </div>
+        </div>
+    </mat-card>
+
+    <div *ngIf="customers.length > 0" fxLayout="row wrap">
+        <div fxFlex="100"> 
+            <mat-card class="p-0 text-center">           
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>

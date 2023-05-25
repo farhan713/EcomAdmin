@@ -1,0 +1,77 @@
+.main{
+    min-height: 400px;
+    min-height: calc(100vh - 288px);
+    padding: 16px;
+}
+.sidenav{
+    width: 250px;
+    padding: 8px 16px;
+    position: fixed;
+    .close{
+        margin-left: 178px;
+    }
+    .divider{
+        margin: 8px 0;
+    }
+}
+.cart-items-count{
+    position: absolute;
+    top: -3px;
+    left: 26px;
+    background: #f44336;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+    border-radius: 50%;
+    font-size: 11px;
+}
+
+.font-weight {
+    font-weight: bold;
+}
+
+.main-wrap{
+    display: flex;
+    // justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid gray;
+    // align-items: center;
+    width: 100%;
+    .for-margin {
+        margin-top: 2%;
+        margin-left: 10px;
+        .price-warp{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 22px;
+            margin-right: 10px;
+        }
+    }
+    .for-img {
+        height: 120px;
+        width: 110px;
+    }
+}
+.for-space {
+    place-content: baseline !important;
+    padding: 5px 10px;
+}
+
+.mat-slider-horizontal {
+    min-width: 50% !important;
+}
+.wrap-width {
+    min-width: 42px !important;
+    margin: 2px !important;
+
+}
+.text-style {
+    padding: 8px 15px !important;
+    color: #616161 !important;
+}
+.for-pad {
+    padding: 0px 10px !important;
+}
+::ng-deep .mat-menu-content {
+    top: 135px !important
+}

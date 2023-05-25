@@ -1,0 +1,46 @@
+<div class="p-1">
+    <mat-card class="p-0"> 
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Create Orginization </h2> 
+            <button mat-raised-button color="primary" (click)="CreateOrgnization(null)">Add Orgnization</button>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-table admin-table">
+            <div class="mat-header-row">
+                <div class="mat-header-cell" style="color: black;">Orgnization Id</div>
+                <div class="mat-header-cell" style="color: black;">Status</div> 
+                <div class="mat-header-cell" style="color: black;">Orgnization Name</div> 
+                <div class="mat-header-cell"></div>
+            </div>
+            <div *ngFor="let setting of orgnizationData " class="mat-row">
+                <div class="mat-cell">{{setting.org_id}}</div>
+                <div class="mat-cell">
+                    <mat-checkbox color="primary" class="example-margin" [checked]="setting.status" (change)="changeStatus(setting)"></mat-checkbox>
+                    <!-- <mat-icon class="text-muted">{{ (setting.isSettingOn) ? 'check_box' : 'check_box_outline_blank'}}</mat-icon>  -->
+                </div>  
+                <div class="mat-cell">
+                    {{ setting.org_name }}
+                </div>   
+                <div class="mat-cell">
+                    <div class="p-1 actions">          
+                        <button mat-mini-fab color="primary" matTooltip="Edit" (click)="CreateOrgnization(setting)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(setting)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>      
+            </div>
+        </div>
+    </mat-card>
+
+    <!-- <div *ngIf="categories.length > 0" fxLayout="row wrap">
+        <div fxFlex="100"> 
+            <mat-card class="p-0 text-center">           
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div> -->
+</div>
+

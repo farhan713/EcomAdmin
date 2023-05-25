@@ -1,0 +1,106 @@
+<div *ngIf="appService.Data.cartList.length == 0 && !purchased">
+  <mat-chip-list>
+      <mat-chip color="warn" selected="true">YOU HAVE NO ITEMS IN YOUR SHOPPING CART.</mat-chip>
+  </mat-chip-list>
+  <a [routerLink]="['/']" mat-raised-button color="primary" class="mt-2" id="continueShip">Continue shopping</a>
+</div>
+
+<div *ngIf="purchased">
+  <mat-chip-list>
+      <mat-chip color="success" selected="true">Yayy! your order has been placed.</mat-chip>
+  </mat-chip-list>
+  <a [routerLink]="['/']" mat-raised-button color="primary" class="mt-2" id="continueShoppin">Continue shopping</a>
+</div>
+
+<mat-card *ngIf="appService.Data.cartList?.length > 0" class="p-0">
+
+  <div class="mat-table cart-table">
+    <div class="mat-header-row">
+      <div class="mat-header-cell">Product</div>
+      <div class="mat-header-cell">Name</div>
+      <div class="mat-header-cell">Price</div>      
+      <div class="mat-header-cell">Quantity</div>
+      <div class="mat-header-cell">Total</div>
+      <div class="mat-header-cell text-center">
+        <div class="px-1">
+          <button mat-raised-button color="warn" (click)="clear()" id="cartClear">Clear All</button>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let product of appService.Data.cartList" class="mat-row">
+      <div class="mat-cell"><img [src]="product.images[0].small"></div>
+      <div class="mat-cell"><a [routerLink]="['/products', product.id, product.name]" id="productName" class="product-name">{{product.name | titlecase}}</a></div>
+      <div class="mat-cell">${{product.newPrice | number : '1.2-2'}}</div>       
+      <div class="mat-cell text-muted">
+        <app-controls [product]="product" [type]="'wish'" (onQuantityChange)="updateCart($event)" id="productControl"></app-controls>
+      </div>
+      <div class="mat-cell">${{total[product.id] | number : '1.2-2'}}</div>
+      <div class="mat-cell text-center">
+        <div class="p-1">
+          <button mat-mini-fab color="warn" (click)="remove(product)" matTooltip="Clear" id="productClear">
+              <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      
+    </div>
+    <div class="mat-row">
+      <div class="mat-cell"><a [routerLink]="['/']" mat-raised-button color="primary" id="matContinueShop">Continue shopping</a></div>
+      <div class="mat-cell"></div>
+      <div class="mat-cell"></div>
+      <div class="mat-cell text-right">
+        <div fxLayout="column" fxLayoutAlign="center end" class="grand-total px-2">
+          <span>SubTotal:</span>
+          <span class="text-muted">Discount:</span>
+          <span class="new-price">Grand total:</span>
+        </div>        
+      </div>
+      <div class="mat-cell">
+        <div fxLayout="column" fxLayoutAlign="center start" class="grand-total">
+          <span id="subTot">${{ grandTotal | number : '1.2-2'}}</span>
+          <span class="text-muted" id="discoun">15%</span>
+          <span class="new-price" id="granTot">${{ (grandTotal - (grandTotal*0.15)) | number : '1.2-2'}}</span>
+        </div>
+      </div>
+      <div class="mat-cell text-center"><a (click)="updateProductTrack()" id="orderSubmit" mat-raised-button color="primary">Order submit </a></div>
+    </div>
+  </div>
+
+</mat-card>
+
+<div class="py-2 mt-2" *ngIf="recommendMoreProducts.length">
+  <h2>Recommended for you</h2>
+  <div class="divider"></div>
+  <app-products-carousel [products]="recommendMoreProducts"></app-products-carousel>
+</div>
+<div class="py-2 mt-2" *ngIf="newRelatedProductsKnn.length">
+  <h2>Discover more options</h2>
+  <div class="divider"></div>
+  <app-products-carousel [products]="newRelatedProductsKnn"></app-products-carousel>
+</div>
+
+<div class="py-2 mt-2" *ngIf="youMay.length">
+  <h2>You may also like</h2>
+  <div class="divider"></div>
+  <app-products-carousel [products]="youMay"></app-products-carousel>
+</div>
+
+<div class="py-2 mt-2" *ngIf="alsoBuyProducts.length">
+  <h2>Customers also viewed</h2>
+  <div class="divider"></div>
+  <app-products-carousel [products]="alsoBuyProducts"></app-products-carousel>
+</div>
+
+<div class="py-2 mt-2" *ngIf="exploreMoreProducts.length">
+  <h2>Explore More Items</h2>
+  <div class="divider"></div>
+  <app-products-carousel [products]="exploreMoreProducts"></app-products-carousel>
+</div>
+<div class="products-tabs" *ngIf="newRelatedProducts.length">  
+  <h2>Check Out Similar Item</h2>
+  <div class="divider"></div>
+  <div (click)="checkPageName('Recommend')" id="checkPageName">
+    <app-products-carousel  [products]="newRelatedProducts"></app-products-carousel>
+  </div>
+ 
+</div>

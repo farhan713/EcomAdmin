@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~swiper/css/swiper.min.css'; 
+@import "app/theme/styles/base";
+@import "app/theme/styles/admin";
+@import "app/theme/styles/theme";
+@import "app/theme/styles/gradients";
+@import "app/theme/styles/rtl";
+
+// .mat-menu-panel {
+//     max-width: 100% !important;
+//     margin-top: 0px;
+//     // margin-left: -100px !important;
+//     height: 50vh !important;
+//     width: 100% !important;
+// }
+.max-home-width {
+  max-width: 100% !important;
+  margin-top: 0px;
+  height: 50vh !important;
+  width: 100vw !important;
+}
+.mat-menu-content.ng-tns-c50-5 {
+    width: 100% !important;
+    
+}
+.categoriesFixPos {
+  margin-top: -20px !important;
+
+}
+
+//  #cdk-overlay-0 {
+
+// top: 109.7386px !important;
+//     // right: 100.503px !important;
+//     // left: 200.14px !important;
+//     right: 0px !important;
+//     left: 0px !important;
+    
+// }
+// #cdk-overlay-1 {
+//     top: 110px !important;
+//     width: 100% !important;
+//     pointer-events: auto !important;
+// }
+
+ .cdk-overlay-connected-position-bounding-box {
+     top: 150px !important; 
+     //left: 0 !important;
+     width: 100% !important;
+    //  background: white !important;
+ }
+// .mat-form-field-infix {
+//     width: 45px !important;
+//     border: 1px solid !important;
+//     border-radius: 4px !important;
+//     padding-left: 4px;
+// }
+.cdk-overlay-pane{
+  top: 0px !important;
+}
+.mat-menu-before {
+  height: auto !important;
+}
+
+//   top: 109.7386px !important;
+//       right: 0px !important;
+//       left: 0px !important;
+//   top: 110px !important;
+//       width: 100% !important;
+//       pointer-events: auto !important;
+// }//  .mat-menu-panel {
+//   width: 100vw !important;
+//   top: 55.7386px !important;
+//   position: relative !important;
+  
+// }
+// #mat-menu-panel-11 {
+//   width: 100vw !important;
+//   top: 55.7386px !important;
+//   position: relative !important;
+// }
+// #mat-menu-panel-3 {
+//   width: 100vw !important;
+//   top: -10px !important;
+//   position: relative !important;
+// }
+// .app.blue .mat-menu-panel {
+//   background: white;
+//     position: relative !important;
+//     top: 25px !important;
+// }
+.mat-datepicker-popup {
+
+}
+.mat-datepicker-content .mat-calendar {
+  width: 296px !important;
+    height: 354px !important;
+    position: absolute !important;
+   // left: 260px !important;
+    background: white !important;
+    top: 115px !important;
+}
+.open-modal {
+    display: block;
+}
+.close-modal {
+    display: none; 
+}
+.modal {
+  
+  position: fixed; 
+  z-index: 111111111;
+  padding-top: 15%; 
+ 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
+
+
+.modal-content {
+  background-color: #fefefe;
+  border-radius: 10px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width:20%;
+}
+
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.for-width {
+ // width: 80% !important;
+}
+.for-but-mar {
+  margin-left: 15px !important;
+  width: 100px !important;
+}
+.sign-text {
+  display: flex;
+  justify-content: center;
+  color: #455a64;
+  
+}
+.text-col {
+  color: #455a64 !important;
+}
+.input-wrap {
+  
+  height: 40px !important;
+    padding: 0px 10px !important;
+    margin: 0px 40px !important;
+    border: 1px solid gray !important;
+    border-radius: 10px !important;
+
+}
+.btn-css {
+  display: flex;
+  justify-content: center;
+  margin-left: -18px;
+  margin-top: 25px;
+}
+.cdk-overlay-pane .mat-datepicker-popup {
+  pointer-events: auto !important;
+    top: 232px !important;
+    left: 266px !important;
+}
+
+ .Abc {
+  .mat-dialog-container {
+    position: absolute !important;
+  top: 120px !important;
+  height: 50vh !important;
+    width: 50% !important;
+    right: 0px;
+  }
+  }
+
+  .customize+* div#cdk-overlay-0{
+    top : 135px !important
+  }
+  .max-width {
+    max-width: 75% !important;
+    //left: 26%;
+    //top: 10px !important;
+    margin-top: 10px;
+    height: 50vh !important;
+  }

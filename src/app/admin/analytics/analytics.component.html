@@ -1,0 +1,397 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.gt-md="25" class="px-1">
+    <mat-form-field appearance="outline">
+      <mat-label>Select Days</mat-label>
+      <mat-select [(ngModel)]="selectedValue"
+        (selectionChange)="getData($event.value)"
+      >
+        <mat-option value="">-</mat-option>
+        <mat-option *ngFor="let day of days" [value]="day">
+          <span>{{ day }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row wrap">
+    <div fxFlex="100" class="p-1">
+      <mat-card>
+        <mat-card-header fxLayoutAlign="center center">
+          <mat-card-subtitle>
+            <h2>Site Search Report</h2>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <div fxLayout="row wrap">
+          <div fxFlex.gt-sm="33.33" *ngIf="Visit.length">
+            <mat-card class="for-car-mar">
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <h2>Visits</h2>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <div class="w-100 h-230p">
+                <div class="for-cir-cen">
+                  <circle-progress
+                    [percent]="Visit[0].value"
+                    [radius]="90"
+                    [outerStrokeWidth]="12"
+                    [innerStrokeWidth]="8"
+                    [outerStrokeColor]="'#FFFFFF'"
+                    [innerStrokeColor]="'#C7E596'"
+                    [animation]="true"
+                    [animationDuration]="1000"
+                  ></circle-progress>
+                </div>
+              </div>
+              <div class="parent-wrap">
+                <div class="">
+                  <div>With Search</div>
+                  <div>Without Search</div>
+                </div>
+                <div class="">
+                  <div id="vWithSearchVal">{{ Visit[0].withSearch }}</div>
+                  <div id="vWithoutSearchVal">{{ Visit[0].withoutSearch }}</div>
+                </div>
+              </div>
+            </mat-card>
+            <mat-card class="for-car-mar">
+              <mat-card-content class="text-style"
+                >Average Order Value</mat-card-content
+              >
+
+              <div class="parent-wrap">
+                <div class="fir">
+                  <div class="f-height">
+                    <div class="f-style" id="vWithSearchAvg">${{ Visit[0].withSearchAverage }}</div>
+                    <div class="f-style-s">With Search</div>
+                  </div>
+                  <div class="f-height">
+                    <div class="f-style" id="vWithoutSearchAvg">${{ Visit[0].withoutAverage }}</div>
+                    <div class="f-style-s">Without Search</div>
+                  </div>
+                </div>
+                <div class="">
+                  <div class="s-height gradiant1">
+                    <div class="align-cent">
+                      <div>
+                        <span class="material-icons"> arrow_circle_up </span>
+                      </div>
+                      <div class="text-cen" id="vSearchImapact">
+                        {{ Visit[0].orderImpact }}X
+                        <div class="imp-text">Search Impact</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="33.33" *ngIf="orders.length">
+            <mat-card class="for-car-mar">
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <h2>Orders</h2>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <div class="w-100 h-230p">
+                <!-- <ngx-charts-gauge [view]="view" [scheme]="colorScheme2" animations="true"
+                                    [results]="orders" [min]="0" [max]="100" [angleSpan]="360" [startAngle]="0"
+                                    [units]="'Percent'" [showAxis]="false" (select)="onSelect($event)" [outerStrokeWidth]="20">
+                                </ngx-charts-gauge> -->
+                <div class="for-cir-cen">
+                  <circle-progress
+                    [percent]="orders[0].value"
+                    [radius]="90"
+                    [outerStrokeWidth]="12"
+                    [backgroundColor]="'#378d3b'"
+                    [innerStrokeWidth]="8"
+                    [outerStrokeColor]="'#FFFFFF'"
+                    [innerStrokeColor]="'#C7E596'"
+                    [animation]="true"
+                    [animationDuration]="1000"
+                  ></circle-progress>
+                </div>
+              </div>
+              <div class="parent-wrap">
+                <div class="">
+                  <div>With Search</div>
+                  <div>Without Search</div>
+                </div>
+                <div class="">
+                  <div id="oWithSearchVal">{{ orders[0].withSearch }}</div>
+                  <div id="oWithoutSearchVal">{{ orders[0].withoutSearch }}</div>
+                </div>
+              </div>
+            </mat-card>
+            <mat-card class="for-car-mar">
+              <mat-card-content class="text-style"
+                >Revenue Per Visit</mat-card-content
+              >
+
+              <div class="parent-wrap">
+                <div class="fir">
+                  <div class="f-height">
+                    <div class="f-style" id="oWithSearchAvg">${{ orders[0].withSearchAverage }}</div>
+                    <div class="f-style-s">With Search</div>
+                  </div>
+                  <div class="f-height">
+                    <div class="f-style" id="oWithoutSearchAvg">${{ orders[0].withoutAverage }}</div>
+                    <div class="f-style-s">Without Search</div>
+                  </div>
+                </div>
+                <div class="">
+                  <div class="s-height gradiant2">
+                    <div class="align-cent">
+                      <div>
+                        <span class="material-icons"> arrow_circle_up </span>
+                      </div>
+                      <div class="text-cen" id="oSearchImapact">
+                        {{ orders[0].revImpact }}X
+                        <div class="imp-text">Search Impact</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="33.33" *ngIf="revenue.length">
+            <mat-card class="for-car-mar">
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <h2>Revenue</h2>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <div class="w-100 h-230p">
+                <!-- <ngx-charts-gauge [view]="view" [scheme]="colorScheme3" animations="true"
+                                    [results]="revenue" [min]="0" [max]="100" [angleSpan]="360" [startAngle]="0"
+                                    [units]="'Percent'" [showAxis]="false" (select)="onSelect($event)">
+                                </ngx-charts-gauge> -->
+                <div class="for-cir-cen">
+                  <circle-progress
+                    [percent]="revenue[0].value"
+                    [radius]="90"
+                    [outerStrokeWidth]="12"
+                    [backgroundColor]="'#f47b00'"
+                    [innerStrokeWidth]="8"
+                    [outerStrokeColor]="'#FFFFFF'"
+                    [innerStrokeColor]="'#C7E596'"
+                    [animation]="true"
+                    [animationDuration]="1000"
+                  ></circle-progress>
+                </div>
+              </div>
+              <div class="parent-wrap">
+                <div class="">
+                  <div>With Search</div>
+                  <div>Without Search</div>
+                </div>
+                <div class="">
+                  <div id="rWithSearchVal">${{ revenue[0].withSearch }}</div>
+                  <div id="rWithoutSearchVal">${{ revenue[0].withoutSearch }}</div>
+                </div>
+              </div>
+            </mat-card>
+            <mat-card class="for-car-mar">
+              <mat-card-content class="text-style"
+                >Conversion Rate</mat-card-content
+              >
+
+              <div class="parent-wrap">
+                <div class="fir">
+                  <div class="f-height">
+                    <div class="f-style" id="rWithSearchAvg">
+                      {{ revenue[0].withSearchAverage }}
+                    </div>
+                    <div class="f-style-s">With Search</div>
+                  </div>
+                  <div class="f-height">
+                    <div class="f-style" id="rWithoutSearchAvg">{{ revenue[0].withoutAverage }}</div>
+                    <div class="f-style-s">Without Search</div>
+                  </div>
+                </div>
+                <div class="">
+                  <div class="s-height gradiant3">
+                    <div class="align-cent">
+                      <div>
+                        <span class="material-icons"> arrow_circle_up </span>
+                      </div>
+                      <div class="text-cen" id="rSearchImapact">
+                        {{ revenue[0].conversionImpact }}X
+                        <div class="imp-text">Search Impact</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div fxFlex="100" class="p-1" *ngIf="sales_summary.length">
+      <!-- <app-sales-summary></app-sales-summary> -->
+      <mat-card>
+        <mat-card-header fxLayoutAlign="center center">
+          <mat-card-subtitle>
+            <h2>Sales Summary</h2>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <div class="row wrap">
+          <div fxFlex.gt-sm="92">
+            <div class="w-100 h-300p">
+              <ngx-charts-bar-vertical
+                [scheme]="colorSchemes"
+                [results]="sales_summary"
+                [gradient]="gradients"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegends"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel"
+                (select)="onSelect($event)"
+              >
+              </ngx-charts-bar-vertical>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div fxFlex="100" fxFlex.gt-sm="70" class="p-1">
+      <!-- <app-montly-sales></app-montly-sales>   -->
+      <div fxLayout="row wrap">
+        <div
+          fxFlex="100"
+          fxFlex.gt-sm="50"
+          class="p-1"
+          *ngIf="popular_searches.length"
+        >
+          <mat-card>
+            <mat-card-header fxLayoutAlign="center">
+              <mat-card-subtitle>
+                <h2>Popular Searches</h2>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="w-100 h-300p" #resizedDiv>
+                <ngx-charts-pie-chart
+                  [scheme]="colorScheme"
+                  [results]="popular_searches"
+                  [legend]="showLegends"
+                  [explodeSlices]="explodeSlices"
+                  [labels]="showLabels"
+                  [doughnut]="doughnut"
+                  [gradient]="gradient"
+                  (select)="onSelect($event)"
+                >
+                </ngx-charts-pie-chart>
+              </div>
+              <div class="main-wrap">
+                <div id="pfirstname">{{ popular_searches[0].name }}</div>
+                <div id="pfirst">{{ popular_searches[0].value }}</div>
+              </div>
+              <div class="main-wrap" *ngIf="popular_searches.length > 1">
+                <div id="pSecondname">{{ popular_searches[1].name }}</div>
+                <div id="pSecond">{{ popular_searches[1].value }}</div>
+              </div>
+              <div class="main-wrap" *ngIf="popular_searches.length > 2">
+                <div id="pThirdname">{{ popular_searches[2].name }}</div>
+                <div id="pThird">{{ popular_searches[2].value }}</div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div
+          fxFlex="100"
+          fxFlex.gt-sm="50"
+          class="p-1"
+          *ngIf="Top_grossing_searches.length"
+        >
+          <mat-card>
+            <mat-card-header fxLayoutAlign="center">
+              <mat-card-subtitle>
+                <h2>Top Grossing Searches</h2>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="w-100 h-300p" #resizedDiv>
+                <ngx-charts-pie-chart
+                  [scheme]="colorScheme"
+                  [results]="Top_grossing_searches"
+                  [legend]="showLegend"
+                  [explodeSlices]="explodeSlices"
+                  [labels]="showLabels"
+                  [doughnut]="doughnut"
+                  [gradient]="gradient"
+                  (select)="onSelect($event)"
+                >
+                </ngx-charts-pie-chart>
+              </div>
+              <div class="main-wrap">
+                <div id="tfirstname">{{ Top_grossing_searches[0].name }}</div>
+                <div id="tfirst">${{ Top_grossing_searches[0].value }}</div>
+              </div>
+              <div class="main-wrap" *ngIf="Top_grossing_searches.length > 1">
+                <div id="tSecondname">{{ Top_grossing_searches[1].name }}</div>
+                <div id="tSecond">${{ Top_grossing_searches[1].value }}</div>
+              </div>
+              <div class="main-wrap" *ngIf="Top_grossing_searches.length > 2">
+                <div id="tThirdname">{{ Top_grossing_searches[2].name }}</div>
+                <div id="tThird">${{ Top_grossing_searches[2].value }}</div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="30" class="p-1" *ngIf="transactions.length">
+      <mat-card>
+        <mat-card-header fxLayoutAlign="center center">
+          <mat-card-subtitle
+            ><h2>Top Converting Searches</h2></mat-card-subtitle
+          >
+        </mat-card-header>
+        <div class="w-100 h-300p">
+          <ngx-charts-bar-horizontal
+            [scheme]="colorScheme"
+            [results]="transactions"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [legend]="showLegend"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="yAxisLabel1"
+            [yAxisLabel]="xAxisLabel1"
+            (select)="onSelect($event)"
+          >
+          </ngx-charts-bar-horizontal>
+        </div>
+        <div class="main-wrap">
+          <div id="cfirstname">{{ transactions[0].name }}</div>
+          <div id="cfirst">{{ transactions[0].value }}%</div>
+        </div>
+        <div class="main-wrap" *ngIf="transactions.length > 1">
+          <div id="cSecondname">{{ transactions[1].name }}</div>
+          <div id="cSecond">{{ transactions[1].value }}%</div>
+        </div>
+        <div class="main-wrap" *ngIf="transactions.length > 2">
+          <div id="cThirdname">{{ transactions[2].name }}</div>
+          <div id="cThird">{{ transactions[2].value }}%</div>
+        </div>
+      </mat-card>
+    </div>
+    <!-- <div fxFlex="100" class="p-1">
+        <app-daily-views-stats></app-daily-views-stats>
+    </div>
+
+    <div fxFlex="100" fxFlex.gt-sm="50" class="p-1">
+        <app-most-viewed-products></app-most-viewed-products>  
+    </div>   -->
+  </div>
+</div>

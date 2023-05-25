@@ -1,0 +1,23 @@
+.user-form{
+    .form-field-outer{
+        width: 280px;
+    }
+    .mat-radio-button{
+        margin-right: 12px;
+    }
+}
+
+.butn-cen {
+    button {
+        margin: 0px 8px 12px 8px;
+    }
+}
+.show {
+    margin: 5px 8px;
+    color: rgba(0, 0, 0, 0.54)
+}
+mat-checkbox ::ng-deep .mat-checkbox-inner-container {width: 20px;height: 20px; margin-right: 10px; margin-bottom: 10px;}
+.align-cent {
+    display: flex;
+    align-items: flex-start;
+}

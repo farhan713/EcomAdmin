@@ -1,0 +1,206 @@
+
+    <!-- <mat-card-header fxLayoutAlign="center center">                
+        <mat-card-subtitle><h2>Refunds by Stores</h2></mat-card-subtitle>
+    </mat-card-header>
+    <div class="w-100 h-300p">
+        <ngx-charts-pie-grid
+            [scheme]="colorScheme"
+            [results]="refunds"
+            (select)="onSelect($event)">
+        </ngx-charts-pie-grid>        
+    </div>
+</mat-card> -->
+
+
+<mat-card>
+    <mat-card-header fxLayoutAlign="center center">                
+        <mat-card-subtitle><h2>Refunds by Stores</h2></mat-card-subtitle>
+    </mat-card-header>
+    <!-- <div class="w-100 h-300p">
+        <ngx-charts-pie-grid
+            [scheme]="colorScheme"
+            [results]="refunds"
+            (select)="onSelect($event)">
+        </ngx-charts-pie-grid>        
+    </div> -->
+    <div fxLayout="row wrap">
+        <div fxFlex="100" fxFlex.gt-sm="33.33" class="p-1"> 
+            <mat-card>
+                <mat-card-header >                
+                    <mat-card-subtitle><h2>Visits</h2></mat-card-subtitle>
+                </mat-card-header>
+                <div class="w-100 h-300p">
+                  
+                    <ngx-charts-gauge
+      [view]="view"
+      [scheme]="colorScheme1"
+      animations = "true"
+      [results]="single"
+      [min]="0"
+      [max]="100"
+      [angleSpan]="360"
+      [startAngle]="0"
+      [units]="'Percent'"
+      [showAxis]="false"
+      (select)="onSelect($event)">
+    </ngx-charts-gauge>
+                </div> 
+                   <div class="parent-wrap">
+                    <div class="">
+                        <div>With Search</div>
+                        <div>Without Search</div>
+                    </div>
+                    <div class="">
+                        <div>3,289</div>
+                        <div>61,970</div>
+                    </div>
+                   </div>
+              </mat-card>
+              <mat-card>
+                <mat-card-content class="text-style">Average Order Value</mat-card-content>
+               
+                   <div class="parent-wrap">
+                    <div class="fir">
+                       <div class="f-height">
+                         <div class="f-style">329,79</div>
+                         <div class="f-style-s">With Search</div>
+                       </div>
+                       <div class="f-height">
+                        <div class="f-style">329,79</div>
+                        <div class="f-style-s">With Search</div>
+                       </div>
+                    </div>
+                    <div class="">
+                        <div class="s-height">
+                            <div class="align-cent">
+                            <div ><span class="material-icons"> arrow_circle_up </span></div>
+                            <div class="text-cen">
+                                1.1X
+                                <div class="imp-text">Search Impact</div>
+                            </div>
+                        </div>
+                           </div>
+                    </div>
+                   </div>
+              </mat-card>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="33.33" class="p-1"> 
+        <mat-card>
+            <mat-card-header >                
+                <mat-card-subtitle><h2>Orders</h2></mat-card-subtitle>
+            </mat-card-header>
+            <div class="w-100 h-300p">
+                <ngx-charts-gauge
+                [view]="view"
+                [scheme]="colorScheme1"
+                animations = "true"
+                [results]="single"
+                [min]="0"
+                [max]="100"
+                [angleSpan]="360"
+                [startAngle]="0"
+                [units]="'Percent'"
+                [showAxis]="false"
+                (select)="onSelect($event)">
+              </ngx-charts-gauge>   
+            </div> 
+               <div class="parent-wrap">
+                <div class="">
+                    <div>With Search</div>
+                    <div>Without Search</div>
+                </div>
+                <div class="">
+                    <div>3,289</div>
+                    <div>61,970</div>
+                </div>
+               </div>
+          </mat-card>
+          <mat-card>
+            <mat-card-content class="text-style">Average Order Value</mat-card-content>
+           
+               <div class="parent-wrap">
+                <div class="fir">
+                   <div class="f-height">
+                     <div class="f-style">329,79</div>
+                     <div class="f-style-s">With Search</div>
+                   </div>
+                   <div class="f-height">
+                    <div class="f-style">329,79</div>
+                    <div class="f-style-s">With Search</div>
+                   </div>
+                </div>
+                <div class="">
+                    <div class="s-height">
+                        <div class="align-cent">
+                        <div ><span class="material-icons"> arrow_circle_up </span></div>
+                        <div class="text-cen">
+                            1.1X
+                            <div class="imp-text">Search Impact</div>
+                        </div>
+                    </div>
+                       </div>
+                </div>
+               </div>
+          </mat-card>
+        </div>
+        <div fxFlex="100" fxFlex.gt-sm="33.33" class="p-1"> 
+            <mat-card>
+                <mat-card-header >                
+                    <mat-card-subtitle><h2>Revenue</h2></mat-card-subtitle>
+                </mat-card-header>
+                <div class="w-100 h-300p">
+                    <ngx-charts-gauge
+                    [view]="view"
+                    [scheme]="colorScheme1"
+                    animations = "true"
+                    [results]="single"
+                    [min]="0"
+                    [max]="100"
+                    [angleSpan]="360"
+                    [startAngle]="0"
+                    [units]="'Percent'"
+                    [showAxis]="false"
+                    (select)="onSelect($event)">
+                  </ngx-charts-gauge>    
+                </div> 
+                   <div class="parent-wrap">
+                    <div class="">
+                        <div>With Search</div>
+                        <div>Without Search</div>
+                    </div>
+                    <div class="">
+                        <div>3,289</div>
+                        <div>61,970</div>
+                    </div>
+                   </div>
+              </mat-card>
+              <mat-card>
+                <mat-card-content class="text-style">Average Order Value</mat-card-content>
+               
+                   <div class="parent-wrap">
+                    <div class="fir">
+                       <div class="f-height">
+                         <div class="f-style">329,79</div>
+                         <div class="f-style-s">With Search</div>
+                       </div>
+                       <div class="f-height">
+                        <div class="f-style">329,79</div>
+                        <div class="f-style-s">With Search</div>
+                       </div>
+                    </div>
+                    <div class="">
+                        <div class="s-height">
+                            <div class="align-cent">
+                            <div ><span class="material-icons"> arrow_circle_up </span></div>
+                            <div class="text-cen">
+                                1.1X
+                                <div class="imp-text">Search Impact</div>
+                            </div>
+                        </div>
+                           </div>
+                    </div>
+                   </div>
+              </mat-card>
+            </div>
+</div>
+</mat-card>

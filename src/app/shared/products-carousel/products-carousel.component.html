@@ -1,0 +1,32 @@
+<div *ngIf="products" class="swiper-container" [swiper]="config">
+    <div class="swiper-wrapper h-100">      
+        <div *ngFor="let product of products" class="swiper-slide">
+            <mat-card class="product-item">
+                <mat-chip-list *ngIf="product.discount">
+                    <mat-chip color="warn" selected="true">{{product.discount}}% OFF</mat-chip>
+                </mat-chip-list>
+                <a (click)="navigateToProductPage( product)" id="navProductOne" class="image-link">
+                    <img [src]="product.images[0].medium" class="swiper-lazy"/>
+                    <!-- <div class="swiper-lazy-preloader"></div> -->
+                </a>
+                <h4 class="category text-muted">{{ product.description }}</h4>                                                                     
+                <a (click)="navigateToProductPage( product)" id="navProductSec" class="title text-truncate">
+                    {{product.name}}
+                </a>
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
+                    <div fxLayout="column" fxLayoutAlign="center start">
+                        <!-- <p class="old-price text-muted"><span >$100</span></p> -->
+                        <p class="new-price">${{product.newPrice}}</p>
+                    </div>
+                    <app-rating ratingsCount="30" ratingsValue="5" [direction]="'column'"></app-rating>
+                </div>                            
+                <div class="divider mt-2"></div>
+                <div class="icons">
+                    <app-controls [product]="product" (onOpenProductDialog)="openProductDialog(product)"></app-controls>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <button mat-mini-fab class="swiper-button-prev swipe-arrow" id="keyboardProLef"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <button mat-mini-fab class="swiper-button-next swipe-arrow" (click)="userRecomandationSendSinglePrdOnNextClick()" id="keyboardProRig"><mat-icon>keyboard_arrow_right</mat-icon></button> 
+</div>

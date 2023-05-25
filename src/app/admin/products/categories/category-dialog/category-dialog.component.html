@@ -1,0 +1,222 @@
+<h1 mat-dialog-title>Add Settings</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div fxLayout="row wrap">
+            <div fxFlex="100">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Page Name</mat-label>
+               
+                    <mat-select (selectionChange)="onchange($event)" formControlName="recommendation_type_page_placement_id">
+                        <mat-option [value]="page" *ngFor="let page of reccomadationLabel" >
+                            <span>{{page.label}}</span>
+                        </mat-option>
+                    </mat-select> 
+                    <mat-error *ngIf="form.controls.recommendation_type_page_placement_id.errors?.required">Page Name is required</mat-error> 
+                </mat-form-field>
+            </div> 
+            <div fxFlex="100">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Setting Name</mat-label>
+
+
+                    <mat-select (selectionChange)="onchangeNew($event)" *ngIf="typeOne" formControlName="recommendation_type_id">
+                        <mat-option *ngFor="let page of recTypeOne" [value]="page">
+                            <span>{{page.recommendation_type}}</span>
+                        </mat-option>
+                    </mat-select> 
+
+
+
+                    <mat-select (selectionChange)="onchangeNew($event)" *ngIf="typeTwo" formControlName="recommendation_type_id">
+                        <mat-option *ngFor="let page of recTypeTwo" [value]="page">
+                            <span>{{page.recommendation_type}}</span>
+                        </mat-option>
+                    </mat-select> 
+                    <mat-select (selectionChange)="onchangeNew($event)" *ngIf="typeThree" formControlName="recommendation_type_id">
+                        <mat-option *ngFor="let page of recTypeThree" [value]="page">
+                            <span>{{page.recommendation_type}}</span>
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls.recommendation_type_id.errors?.required">Setting is required</mat-error> 
+                </mat-form-field>
+            </div> 
+            <div fxFlex="100" class="py-1">    
+                <mat-checkbox formControlName="status" color="primary">Status</mat-checkbox>
+                
+            </div> 
+        </div>
+        
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            <button mat-raised-button color="primary" type="submit">Save</button>
+        </div> 
+    </div>
+</form>
+<!-- <div mat-dialog-content>
+    <div fxLayout="row wrap">
+        <div fxFlex="100">
+            <div fxFlex="100"><div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Card Title</h2>
+                </div>
+                <div class="card-body">
+                  <p class="card-text">Card content goes here</p>
+                </div>
+              </div>
+            </div>
+           
+        </div>
+        <div fxFlex="100">
+            <div fxFlex="100"><div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Card Title</h2>
+                </div>
+                <div class="card-body">
+                  <p class="card-text">Card content goes here</p>
+                </div>
+              </div>
+            </div>
+           
+        </div>
+        <div fxFlex="100">
+            <div fxFlex="100"><div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Card Title</h2>
+                </div>
+                <div class="card-body">
+                  <p class="card-text">Card content goes here</p>
+                </div>
+              </div>
+            </div>
+         
+        </div> <div fxFlex="100">
+            <div fxFlex="100"><div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">Card Title</h2>
+                </div>
+                <div class="card-body">
+                  <p class="card-text">Card content goes here</p>
+                </div>
+              </div>
+            </div>
+           
+        </div>
+    </div>
+
+  </div> -->
+  <!-- <div fxLayout="row" fxLayout.xs="column"  >
+    <div class="block" *ngFor="let page of reccomadationLabel" >
+        <div fxFlex="100">
+            <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Card Title</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{page.label}}</p>
+        </div>
+      </div>
+    </div>
+    </div>
+    
+  </div> -->
+
+<!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div mat-dialog-actions class="bt-marging">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+                <button mat-raised-button color="primary" type="submit">Grouped Synonym</button>
+           
+               
+            </div> 
+        </div>
+        <h1 mat-dialog-title>Edit Synonym</h1>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty">Grouped synonyms specify equvalent keyword that will return the same result for all keywords </p>
+        </div>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty-ex">Example: Searching for "t-shirts", "crew", "leo" and "v-neck" will all return the same result </p>
+        </div>
+        <div fxLayout="row wrap">
+            
+         
+            <div fxFlex="100">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Synonyms</mat-label>
+                    <textarea matInput
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="10"></textarea>
+                    <mat-error *ngIf="form.controls.settingName.errors?.required">Name is required</mat-error> 
+                </mat-form-field>
+            </div> 
+          
+        
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            <button mat-raised-button color="primary" type="submit">Save Changes</button>
+        </div> 
+    </div>
+</form> -->
+
+
+<!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div mat-dialog-actions class="bt-marging">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+                <button mat-raised-button color="primary" type="submit">One Way Synonym</button>
+               
+            </div> 
+        </div>
+        <h1 mat-dialog-title>Edit Synonym</h1>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty">One way synonyms are usefull for including for specific results in a broadband search query </p>
+        </div>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty-ex">Example: When searching for "fruits", you want to show results for "strawberry","banana", "apple" but you 
+                would not want banana to show up when someone show for apple 
+            </p>
+        </div>
+        <div fxLayout="row wrap">
+            
+        
+            <div fxFlex="100" fxFlex.gt-sm="45" class="px-1">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Synonyms</mat-label>
+                    <textarea matInput
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="10"></textarea>
+                    <mat-error *ngIf="form.controls.settingName.errors?.required">Name is required</mat-error> 
+                </mat-form-field>
+            </div> 
+            <div fxFlex="100" fxFlex.gt-sm="10" class="px-1">
+                <span class="material-icons text-span"> arrow_circle_right </span>
+            </div> 
+            <div fxFlex="100" fxFlex.gt-sm="45" class="px-1">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Synonyms</mat-label>
+                    <textarea matInput
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="10"></textarea>
+                    <mat-error *ngIf="form.controls.settingName.errors?.required">Name is required</mat-error> 
+                </mat-form-field>
+            </div> 
+        
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            <button mat-raised-button color="primary" type="submit">Save Changes</button>
+        </div> 
+    </div>
+</form> -->

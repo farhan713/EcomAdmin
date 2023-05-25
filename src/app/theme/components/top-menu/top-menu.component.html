@@ -1,0 +1,93 @@
+<div class="top-menu">    
+
+    <!-- <a mat-button [matMenuTriggerFor]="currencyMenu" #currencyMenuTrigger="matMenuTrigger">
+        {{currency}}<mat-icon class="mat-icon-sm caret">arrow_drop_down</mat-icon>
+    </a>
+    <mat-menu #currencyMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown">
+        <span (mouseleave)="currencyMenuTrigger.closeMenu()">
+            <button mat-menu-item *ngFor="let cur of currencies" (click)="changeCurrency(cur)">
+                <span>{{cur}}</span>
+            </button>
+        </span>
+    </mat-menu>
+
+    <a mat-button [matMenuTriggerFor]="langMenu" #langMenuTrigger="matMenuTrigger">
+        <img [src]="flag.image" width="18">
+        <span fxShow="false" fxShow.gt-sm class="flag-menu-title">{{flag.name}}</span>
+        <mat-icon class="mat-icon-sm caret">arrow_drop_down</mat-icon>
+    </a>
+    <mat-menu #langMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown">
+        <span (mouseleave)="langMenuTrigger.closeMenu()">
+            <button mat-menu-item *ngFor="let flag of flags" (click)="changeLang(flag)">
+                <img [src]="flag.image" width="18"> {{flag.name}}
+            </button>
+        </span>
+    </mat-menu> -->
+
+    <span fxShow="false" fxShow.gt-sm>
+        <a mat-button routerLink="/compare">Compare <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.compareList.length}})</a>
+        <a mat-button routerLink="/wishlist">Wishlist <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</a>
+    </span>  
+
+    <a mat-button (click)="openCloseDialoge()" *ngIf="userId == '-1' ">
+        <mat-icon class="mat-icon-sm account-icon">person</mat-icon> <span fxShow="false" fxShow.gt-sm>Login</span> <mat-icon class="mat-icon-sm caret">arrow_drop_down</mat-icon>
+    </a>
+    <a mat-button (click)="logout()" *ngIf=" userId != '-1' ">
+        <mat-icon class="mat-icon-sm account-icon">person</mat-icon> <span fxShow="false" fxShow.gt-sm>Logout</span> <mat-icon class="mat-icon-sm caret">arrow_drop_down</mat-icon>
+    </a>
+    <!-- <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown account">
+        <span (mouseleave)="accountMenuTrigger.closeMenu()">
+            <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">                   
+                <img src="assets/images/others/user.jpg" alt="user-image" width="50">
+                <p>Emilio Verdines <br> <small>emilio_v <span *ngIf="settings.rtl">&rlm;</span>(152<mat-icon class="mat-icon-xs">star</mat-icon>)</small></p>
+            </div>
+            <div class="divider"></div>
+            <a mat-menu-item routerLink="/account"> 
+                <mat-icon class="mat-icon-sm">settings</mat-icon>
+                <span>Account Settings</span> 
+            </a>
+            <a mat-menu-item routerLink="/compare" fxHide="false" fxHide.gt-sm>
+                <mat-icon class="mat-icon-sm">compare</mat-icon>
+                <span>Compare <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.compareList.length}})</span> 
+            </a>
+            <a mat-menu-item routerLink="/wishlist" fxHide="false" fxHide.gt-sm>
+                <mat-icon class="mat-icon-sm">favorite</mat-icon>
+                <span>Wishlist <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</span>
+            </a>
+            <a mat-menu-item routerLink="/"> 
+                <mat-icon class="mat-icon-sm">lock</mat-icon>
+                <span>Lock screen</span> 
+            </a>
+            <a mat-menu-item routerLink="/"> 
+                <mat-icon class="mat-icon-sm">help</mat-icon>
+                <span>Help</span> 
+            </a>
+            <div class="divider"></div>
+            <a mat-menu-item routerLink="/sign-in"> 
+                <mat-icon class="mat-icon-sm">power_settings_new</mat-icon>
+                <span>Sign Out</span> 
+            </a>
+        </span>
+    </mat-menu>     -->
+
+</div>  
+
+<div id="myModal" [ngClass]="isModeOpen ? 'open-modal' : 'close-modal'" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close" (click)="openCloseDialoge()">&times;</span>
+      <!-- <input type="text" placeholder="userId"> -->
+      <div>
+      <div class="sign-text">
+      <a mat-menu-item class="text-col"><b>Sign In</b></a>
+      </div>
+      <form [formGroup]="loginForm" method="post" class="subscribe-search-form for-width"  ngClass.sm="mt-2">
+            <div><input formControlName="userId" class="input-wrap" type="text" placeholder="User id..." fxFlex></div>
+            <div class="btn-css"><button mat-raised-button color="primary" (click)="login()" type="button" class="mat-elevation-z0 for-but-mar">Log In</button></div>
+        </form>
+    </div>
+      <!-- <p>Some text in the Modal..</p> -->
+    </div>
+  
+  </div>

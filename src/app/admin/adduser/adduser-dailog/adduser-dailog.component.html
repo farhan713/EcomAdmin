@@ -1,0 +1,194 @@
+
+<!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div mat-dialog-actions class="bt-marging">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+                <button mat-raised-button color="primary" type="submit">Grouped Synonym</button>
+           
+               
+            </div> 
+        </div>
+        <h1 mat-dialog-title>Edit Synonym</h1>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty">Grouped synonyms specify equvalent keyword that will return the same result for all keywords </p>
+        </div>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty-ex">Example: Searching for "t-shirts", "crew", "leo" and "v-neck" will all return the same result </p>
+        </div>
+        <div fxLayout="row wrap">
+            
+         
+            <div fxFlex="100">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Synonyms</mat-label>
+                    <textarea matInput
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="10"></textarea>
+                    <mat-error *ngIf="form.controls.settingName.errors?.required">Name is required</mat-error> 
+                </mat-form-field>
+            </div> 
+          
+        
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            <button mat-raised-button color="primary" type="submit">Save Changes</button>
+        </div> 
+    </div>
+</form> -->
+
+
+<!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div mat-dialog-actions class="bt-marging">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+                <button mat-raised-button color="primary" type="submit">One Way Synonym</button>
+               
+            </div> 
+        </div>
+        <h1 mat-dialog-title>Edit Synonym</h1>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty">One way synonyms are usefull for including for specific results in a broadband search query </p>
+        </div>
+        <div fxLayout="row wrap">
+            <p class="for-text-sty-ex">Example: When searching for "fruits", you want to show results for "strawberry","banana", "apple" but you 
+                would not want banana to show up when someone show for apple 
+            </p>
+        </div>
+        <div fxLayout="row wrap">
+            
+        
+            <div fxFlex="100" fxFlex.gt-sm="45" class="px-1">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Synonyms</mat-label>
+                    <textarea matInput
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="10"></textarea>
+                    <mat-error *ngIf="form.controls.settingName.errors?.required">Name is required</mat-error> 
+                </mat-form-field>
+            </div> 
+            <div fxFlex="100" fxFlex.gt-sm="10" class="px-1">
+                <span class="material-icons text-span"> arrow_circle_right </span>
+            </div> 
+            <div fxFlex="100" fxFlex.gt-sm="45" class="px-1">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Synonyms</mat-label>
+                    <textarea matInput
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="10"></textarea>
+                    <mat-error *ngIf="form.controls.settingName.errors?.required">Name is required</mat-error> 
+                </mat-form-field>
+            </div> 
+        
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+            <button mat-raised-button color="primary" type="submit">Save Changes</button>
+        </div> 
+    </div>
+</form> -->
+<div mat-dialog-content>
+ <form [formGroup]="form" class="user-form">      
+        <mat-tab-group class="vertical-tabs">
+            <mat-tab label="Basic">
+                <div fxLayout="column" class="form-field-outer">
+                    <mat-form-field class="w-100">
+                        <mat-placeholder><mat-icon>person</mat-icon> Username</mat-placeholder>
+                        <input matInput  required>
+                        <!-- <mat-error *ngIf="form.controls.username.errors?.required">Username is required</mat-error>
+                        <mat-error *ngIf="form.controls.username.hasError('minlength')">Username isn't long enough, minimum of 5 characters</mat-error>-->
+                    </mat-form-field> 
+                    <mat-form-field class="w-100">
+                        <mat-placeholder><mat-icon>vpn_key</mat-icon> Password</mat-placeholder>
+                        <input matInput required [type]="passwordHide ? 'password' : 'text'">
+                        <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                        <!-- <mat-error *ngIf="form.controls.password.errors?.required">Password is required</mat-error>
+                        <mat-error *ngIf="form.controls.password.hasError('minlength')">Password isn't long enough, minimum of 6 characters</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </mat-tab>
+            <mat-tab label="Personal" >
+                <div fxLayout="column" class="form-field-outer">
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Name" >
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Surname" >
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput [matDatepicker]="birthday" placeholder="Birthday" >
+                        <mat-datepicker-toggle matSuffix [for]="birthday"></mat-datepicker-toggle>
+                        <mat-datepicker #birthday></mat-datepicker>
+                    </mat-form-field>
+                    <mat-radio-group >
+                        <mat-radio-button value="male" labelPosition="before">Male</mat-radio-button>
+                        <mat-radio-button value="female" labelPosition="before">Female</mat-radio-button>
+                    </mat-radio-group>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Image url" >
+                    </mat-form-field>
+                </div>
+            </mat-tab>
+            <mat-tab label="Work">
+                <div fxLayout="column" class="form-field-outer">
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Company">
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Position" >
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Salary" >
+                        <span matPrefix>$&nbsp;</span>
+                        <span matSuffix>.00</span>
+                    </mat-form-field>
+                </div>
+            </mat-tab>
+            <mat-tab label="Contacts" >
+                <div fxLayout="column" class="form-field-outer">
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Email" >
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Phone" >
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Address" >
+                    </mat-form-field>
+                </div>
+            </mat-tab>
+            <mat-tab label="Social life" >
+                <div fxLayout="column" class="form-field-outer">
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Facebook" >
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Twitter" >
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Google" >
+                    </mat-form-field>
+                </div>
+            </mat-tab>
+            <mat-tab label="Settings" >
+                <div fxLayout="column" class="form-field-outer">
+                    <mat-checkbox >Active</mat-checkbox>
+                    <mat-checkbox >Blocked</mat-checkbox>
+                    <!-- <p ><span>Registration date:</span> <i>{{user.settings.registrationDate | date:"dd MMMM, yyyy 'at' HH:mm" }}</i></p> 
+                    <p ><span>Last joined date:</span> <i>{{user.settings.joinedDate | date:"dd MMMM, yyyy 'at' HH:mm" }}</i> </p> -->    
+                </div> 
+            </mat-tab>
+        </mat-tab-group>
+    </form> 
+</div>
+ 

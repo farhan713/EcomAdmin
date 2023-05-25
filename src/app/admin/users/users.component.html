@@ -1,0 +1,278 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="p-1">
+    <div fxLayout="row">
+        <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">
+            <!-- <mat-button-toggle value="add" (click)="openUserDialog(null)">
+                <mat-icon>person_add</mat-icon>
+            </mat-button-toggle> -->
+            <mat-button-toggle value="search">
+                <mat-icon>search</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <form class="user-search" [class.show]="controls.value == 'search'">
+        <mat-form-field class="user-search-input">
+            <span></span>
+            <input #menuTrigger="matMenuTrigger" (keyup)="filterByQueryNew($event)" [matMenuTriggerFor]="menu" matInput
+                placeholder="Search user by name..." [(ngModel)]="searchText" name="search">
+        </mat-form-field>
+    </form>
+    <div fxLayout="row" >
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Sorting</mat-label>
+          <mat-select placeholder="Select Sorting" [(ngModel)]="selectedSorting" (selectionChange)="updateSorting()">
+            <mat-option value="">
+                Default
+                </mat-option>
+            <mat-option *ngFor="let item of sortingListL" [value]="item.sorting_label">
+           {{item.sorting_felid | titlecase}}: {{item.sorting_label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-button-toggle-group #viewType="matButtonToggleGroup" appearance="legacy" value="grid">
+            <mat-button-toggle value="grid" (click)="openUserDialog()">
+                <mat-icon>tune</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="grid"  (click)="saveSequence()">
+                <mat-icon>published_with_changes</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+  
+</div>
+
+
+<div fxLayout="row wrap" *ngIf="viewType.value == 'grid'" cdkDropList (cdkDropListDropped)="drop($event,product,i)">
+    <div fxFlex.gt-sm="33.33" *ngFor="let product of productList;let i = index" (dblclick)="method2(product)" cdkDrag>
+        <mat-card class="example-card" [cdkDragData]="product" (cdkDropDropped)="dropped(product,i)">
+            <mat-card-header>
+
+                <div class="mat-wrap">
+                    <div *ngIf="!product.pinned"><span class="material-icons"> arrow_circle_up </span></div>
+                    <div *ngIf="product.pinned" class="for-pinn"><span class="material-icons"> arrow_circle_up </span> Pinned</div>
+                    <div>{{i}}</div>
+                </div>
+            </mat-card-header>
+            <div class="abc">
+                <img mat-card-image src={{product.image_url}} alt="Photo of a Shiba Inu">
+            </div>
+            <mat-card-content>
+                <div class="img-text">{{product.product}}</div>
+
+                <div>
+                    <div class="main-sku">
+                        <div>SKU</div>
+                        <div>Price: <span>${{product.price}}</span></div>
+                    </div>
+                    <div class="main-sku for-boo-mar">
+                        BOOSTS
+                    </div>
+                    <div class="content-wrap">
+                        <div>
+                            <div>ss_inventory: <span>1000</span></div>
+                            <div>collection: <span>is not sale + 10</span></div>
+                            <div>ss_days_sine: <span>222</span></div>
+                        </div>
+                        <div> <mat-button>
+                            <mat-icon class="del-sty" (click)="deleteProductFromList(product)">delete</mat-icon>
+                        </mat-button> </div>
+                        
+                    </div>
+                </div>
+            </mat-card-content>
+            <!-- <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions> -->
+        </mat-card>
+    </div>
+
+</div>
+
+
+<div *ngIf="users" fxLayout="row wrap">
+    <div fxFlex="100" class="p-1">
+        <mat-card class="p-0 text-center">
+            <pagination-controls class="product-pagination" autoHide="true" maxSize="5"
+                (pageChange)="onPageChanged($event)"></pagination-controls>
+        </mat-card>
+    </div>
+</div>
+
+
+
+
+<mat-menu #menu="matMenu" [overlapTrigger]="true" class="mega-menu app-dropdown max-width"
+    style="height: 200px !important; width: 200px !important;" [hasBackdrop]="false">
+    <div fxLayout="row wrap" style="width: 60vw !important;" >
+
+        <div fxFlex="25" class="p-1" *ngFor="let item of serverRes" >
+            <div class="an"  (dblclick)="doubleClickKeyword(item.keyword)" (click)="changeByKeyword(item.keyword); $event.stopPropagation();">
+                <a mat-menu-item><b>{{item.keyword}}</b></a>
+                <mat-divider></mat-divider>
+
+            </div>
+        </div>
+        <div fxFlex="25" class="p-1">
+            <span class="close" (click)="closeSearchBox()">&times;</span>
+        </div>
+       
+
+
+
+    </div>
+    <div fxLayout="row wrap" style=" width: 60vw !important;">
+        <!-- <div fxFlex="30" class="p-1">
+            <mat-accordion displayMode="flat" multi="true">
+                <mat-expansion-panel expanded  style="box-shadow: none !important;">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <h4>Categories</h4>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="categories-wrapper categories-dropdown" perfectScrollbar>
+                        <div>All</div>
+                        <div>Pets</div>
+                        <div>Toys</div>
+                    </div>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel expanded style="box-shadow: none !important;">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <h4>Colors</h4>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="categories-wrapper categories-dropdown" perfectScrollbar>
+                        <div>Red</div>
+                        <div>Blue</div>
+                        <div>Green</div>
+                    </div>
+                </mat-expansion-panel>
+          
+
+            </mat-accordion>
+        </div> -->
+
+        <div fxFlex="70" class="p-1">
+            <a mat-menu-item routerLink="/" class="for-style-tex"
+                style="color: rgba(0, 0, 0, 0.87) !important;"><b>Search Result For...</b></a>
+            <div fxLayout="row wrap">
+                <div fxFlex="30"  *ngFor="let product of searchedProductList"
+                 (click)="$event.stopPropagation();"
+                 (dblclick)="pushtoOld(product);$event.stopPropagation();"
+                 [ngClass]="{'isSelected' : product.pinned}" style="margin-bottom: 15px; margin-right: 15px;">
+                    <div class="img-center">
+                        <img class="pop-img" src={{product.image_url}}>
+                    </div>
+                    <div class="text-cen">{{product.product}}</div>
+                </div>
+
+            </div>
+        
+        </div>
+    </div>
+</mat-menu>
+
+
+<div id="myModal" class="modal" *ngIf="isOpen">
+
+    <!-- Modal content -->
+    <div class="modal-content-1">
+        <span class="close" (click)="openUserDialog()">&times;</span>
+
+        <div fxLayout="row wrap">
+
+            <div fxFlex="100" class="p-1">
+
+                <div fxLayout="row wrap">
+                    <div fxFlex.gt-sm="100">
+                        <h3 mat-dailog-title class="show"> Selected Fields</h3>
+                        <div class="butn-cen">
+                            <button *ngIf="requestBody.brand.length" mat-raised-button color="primary"
+                                (click)="removeFilter('brand')">Brand <span
+                                    class="material-icons">cancel</span></button>
+
+                            <button *ngIf="requestBody.dept.length" mat-raised-button color="primary"
+                                (click)="removeFilter('dept')">Department <span
+                                    class="material-icons">cancel</span></button>
+
+                            <button *ngIf="requestBody.type.length" mat-raised-button color="primary"
+                                (click)="removeFilter('type')">Type <span class="material-icons">cancel</span></button>
+                            <button *ngIf="requestBody.subtype.length" mat-raised-button color="primary"
+                                (click)="removeFilter('subtype')">Sub Type <span
+                                    class="material-icons">cancel</span></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row wrap">
+
+            <div fxFlex="100" class="p-1">
+
+                <div fxLayout="row wrap">
+                    <div fxFlex.gt-sm="100">
+                        <!-- <h3 mat-dailog-title class="show"> Find Fields</h3> -->
+                        <mat-accordion displayMode="flat" multi="true">
+                            <mat-expansion-panel expanded *ngIf="!isFromSearch" style="box-shadow: none !important;">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <h4>Select from Fields</h4>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="categories-wrapper categories-dropdown" perfectScrollbar>
+                                    <div (click)="selectBrand()" class="mar-bot" [ngClass]="{'active' : isBrandSelected}">Brand </div>
+                                    <div (click)="selectDept()" class="mar-bot" [ngClass]="{'active' : isDeptSelected}">DepartMent</div>
+                                    <div (click)="selectType()" class="mar-bot" [ngClass]="{'active' : isTypeSelected}">Type</div>
+                                    <div (click)="selectSubType()" class="mar-bot" [ngClass]="{'active' : isSubtypeSelected}">SubType</div>
+                                </div>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel expanded style="box-shadow: none !important;">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <h4 *ngIf="isBrandSelected">Select from Brand list </h4>
+                                        <h4 *ngIf="isDeptSelected">Select from Department list </h4>
+                                        <h4 *ngIf="isTypeSelected">Select from Type list </h4>
+                                        <h4 *ngIf="isSubtypeSelected">Select from Sub Type list </h4>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="categories-wrapper categories-dropdown" perfectScrollbar>
+                                    <div *ngIf="isBrandSelected">
+                                        <div class="align-cent" *ngFor="let item of brandList"> <mat-checkbox
+                                                color="primary" [checked]="item.isSelected"
+                                                (change)="filterBrand($event,item)" class="ceck-size"></mat-checkbox>
+                                            {{item.name}}</div>
+                                    </div>
+                                    <div *ngIf="isDeptSelected">
+                                        <div class="align-cent" *ngFor="let item of deptList"> <mat-checkbox
+                                                color="primary" [checked]="item.isSelected"
+                                                (change)="filterDept($event,item)" class="ceck-size"></mat-checkbox>
+                                            {{item.name}}</div>
+                                    </div>
+                                    <div *ngIf="isTypeSelected">
+                                        <div class="align-cent" *ngFor="let item of typeList"> <mat-checkbox
+                                                color="primary" [checked]="item.isSelected"
+                                                (change)="filterType($event,item)" class="ceck-size"></mat-checkbox>
+                                            {{item.name}}</div>
+                                    </div>
+                                    <div *ngIf="isSubtypeSelected">
+                                        <div class="align-cent" *ngFor="let item of subTypeList"> <mat-checkbox
+                                                color="primary" [checked]="item.isSelected"
+                                                (change)="filterSubType($event,item)" class="ceck-size"></mat-checkbox>
+                                            {{item.name}}</div>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+
+
+                        </mat-accordion>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,232 @@
+<div class="p-1">
+    <mat-card class="p-0">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Manage Recommendation </h2>
+        </div>
+        <mat-divider></mat-divider>
+        <div fxLayout="row wrap" *ngIf="reccomendationData.length">
+             
+            <div fxFlex.gt-md="33.3" *ngFor="let item of reccomendationData">
+                <ng-container *ngFor="let keyValuePair of item | keyvalue">
+                <mat-card class="p-0 mar-for-card">
+                    <div class="bg-primary" fxLayout="row" style="height: 40px;" fxLayoutAlign="space-between center">
+                        <h3 class="user-name">{{  removeUnderscore(keyValuePair.key)}}</h3>
+
+                    </div>
+
+                    <div class="main-wrap-first">
+
+                        <div>
+                            Setting Name
+                        </div>
+
+
+                        <div>
+                            Status
+                        </div>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <div class="main-wrap"  *ngFor="let recommendation of keyValuePair.value">
+
+                            <div>
+                                {{recommendation.recommendation_type}}
+                            </div>
+
+
+
+                            <div>
+                                <mat-slide-toggle  [(ngModel)]="recommendation.status" color="primary"
+                                    (change)="changeStatusViaToggle($event , recommendation.user_recommendation_id)"></mat-slide-toggle>
+                            </div>
+
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
+
+
+                </mat-card>
+                </ng-container>
+        </div>
+            <!-- <div fxFlex.gt-md="33.3">
+                <mat-card class="p-0 mar-for-card">
+                    <div class="bg-primary" fxLayout="row" style="height: 40px;" style="height: 40px;"
+                        fxLayoutAlign="space-between center">
+                        <h3 class="user-name">Checkout Page</h3>
+
+                    </div>
+
+                    <div class="main-wrap-first">
+
+                        <div>
+                            Setting Name
+                        </div>
+
+
+                        <div>
+                            Status
+                        </div>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <div class="main-wrap" *ngFor="let item of checkOutPageData ">
+
+                            <div>
+                                {{item.recommendation_type}}
+                            </div>
+
+
+
+                            <div>
+                                <mat-slide-toggle color="primary" [checked]="item.status"
+                                    (change)="changeStatusViaToggle($event ,item.user_recommendation_id)"></mat-slide-toggle>
+                            </div>
+
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
+
+
+                </mat-card>
+            </div>
+            <div fxFlex.gt-md="33.3">
+                <mat-card class="p-0 mar-for-card">
+                    <div class="bg-primary" fxLayout="row" style="height: 40px;" fxLayoutAlign="space-between center">
+                        <h3 class="user-name">Order Confirmation Page</h3>
+
+                    </div>
+
+                    <div class="main-wrap-first">
+
+                        <div>
+                            Setting Name
+                        </div>
+
+
+                        <div>
+                            Status
+                        </div>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <div class="main-wrap" *ngFor="let item of orderConfirmationData ">
+
+                            <div>
+                                {{item.recommendation_type}}
+                            </div>
+
+
+
+                            <div>
+                                <mat-slide-toggle color="primary" [checked]="item.status"
+                                    (change)="changeStatusViaToggle($event , item.user_recommendation_id)"></mat-slide-toggle>
+                            </div>
+
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
+
+
+                </mat-card>
+            </div>
+            <div fxFlex.gt-md="33.3">
+                <mat-card class="p-0 mar-for-card">
+                    <div class="bg-primary" fxLayout="row" style="height: 40px;" fxLayoutAlign="space-between center">
+                        <h3 class="user-name">Product Page</h3>
+
+                    </div>
+
+                    <div class="main-wrap-first">
+
+                        <div>
+                            Setting Name
+                        </div>
+
+
+                        <div>
+                            Status
+                        </div>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <div class="main-wrap" *ngFor="let item of productPageData ">
+
+                            <div>
+                                {{item.recommendation_type}}
+                            </div>
+
+
+
+                            <div>
+                                <mat-slide-toggle [checked]="item.status" color="primary"
+                                    (change)="changeStatusViaToggle($event ,item.user_recommendation_id)"></mat-slide-toggle>
+                            </div>
+
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
+
+
+                </mat-card>
+            </div>
+            <div fxFlex.gt-md="33.3">
+                <mat-card class="p-0 mar-for-card">
+                    <div class="bg-primary" fxLayout="row" style="height: 40px;" fxLayoutAlign="space-between center">
+                        <h3 class="user-name">Add to cart Page</h3>
+
+                    </div>
+
+                    <div class="main-wrap-first">
+
+                        <div>
+                            Setting Name
+                        </div>
+
+
+                        <div>
+                            Status
+                        </div>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <div class="main-wrap" *ngFor="let item of addTocartData ">
+
+                            <div>
+                                {{item.recommendation_type}}
+                            </div>
+
+
+
+                            <div>
+                                <mat-slide-toggle [checked]="item.status"
+                                    (change)="changeStatusViaToggle($event ,item.user_recommendation_id)"
+                                    color="primary"></mat-slide-toggle>
+                            </div>
+
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
+
+
+                </mat-card>
+            </div>
+           -->
+
+
+        </div>
+    </mat-card>
+
+    <div *ngIf="categories.length > 0" fxLayout="row wrap">
+        <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="5"
+                    (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>

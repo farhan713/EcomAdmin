@@ -1,0 +1,67 @@
+<div class="p-1">
+    <mat-card class="p-0"> 
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Keyword Breakdown</h2>
+            <mat-form-field appearance="outline" >
+                <mat-label>Select Type</mat-label>
+                <mat-select   [(ngModel)]="selectedValue" (selectionChange)="getRecomandationData($event.value)">
+                    
+                    <mat-option value="1">
+                        <span>1</span>
+                    </mat-option>
+                    <mat-option value="7">
+                        <span>7</span>
+                    </mat-option>
+                    <mat-option value="15">
+                        <span>15</span>
+                    </mat-option>
+                    <mat-option value="30">
+                        <span>30</span>
+                    </mat-option>
+                  
+                </mat-select>
+            </mat-form-field> 
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-table admin-table">
+            <div class="mat-header-row">
+                <div class="mat-header-cell">Query</div>
+                <div class="mat-header-cell">Unique Search</div>
+                <!-- <div class="mat-header-cell">Requests</div> -->
+                <div class="mat-header-cell">Product</div>
+                <div class="mat-header-cell">Revenue</div>
+                <div class="mat-header-cell">No of Transaction</div>
+                <div class="mat-header-cell">Conversion Rate</div>
+                <div class="mat-header-cell">Per Search Value</div> 
+            </div>
+            <div  class="mat-row" *ngFor="let i of data"> 
+                <div class="mat-cell">{{i.query}}</div>
+                <div class="mat-cell">{{i.unique_search}}</div>
+                <!-- <div class="mat-cell">{{i.requests}}</div>  -->
+                <div class="mat-cell">{{i.product}}</div>
+                <div class="mat-cell"> ${{i.revenue|number: '1.2-2'}}</div>
+                <div class="mat-cell">{{i.no_of_transaction}}</div> 
+                <div class="mat-cell">{{i.conversion_rate|number: '1.2-2'}}</div>
+                <div class="mat-cell">${{i.per_search_value|number: '1.2-2'}}</div>
+                <!-- <div class="mat-cell">
+                    <div class="p-1 actions">          
+                        <button mat-mini-fab color="primary" matTooltip="Reply">
+                            <mat-icon>reply_all</mat-icon>
+                        </button>
+                        <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(ticket)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>       -->
+            </div>
+        </div>
+    </mat-card>
+
+    <!-- <div *ngIf="tickets.length > 0" fxLayout="row wrap">
+        <div fxFlex="100"> 
+            <mat-card class="p-0 text-center">           
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div> -->
+</div>

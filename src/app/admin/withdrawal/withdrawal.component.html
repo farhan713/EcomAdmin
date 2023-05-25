@@ -1,0 +1,46 @@
+<div class="p-1">
+    <mat-card class="p-0"> 
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Sorting </h2> 
+            <button mat-raised-button color="primary" (click)="openCategoryDialog(null)" >Add Sorting</button>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-table admin-table">
+            <div class="mat-header-row">
+                <div class="mat-header-cell" style="color: black;">Sorting Name</div>
+                <div class="mat-header-cell" style="color: black;">Sorting Status</div> 
+                <div class="mat-header-cell" style="color: black;">Sorting Type</div> 
+                <div class="mat-header-cell"></div>
+            </div>
+            <div *ngFor="let sort of sortingData " class="mat-row">
+                <div class="mat-cell">{{sort.sorting_label}}</div>
+                <div class="mat-cell">
+                    <mat-checkbox color="primary" (change)="changeStatus(sort)" class="example-margin" [checked]="sort.status" ></mat-checkbox>
+                    <!-- <mat-icon class="text-muted">{{ (setting.isSettingOn) ? 'check_box' : 'check_box_outline_blank'}}</mat-icon>  -->
+                </div>  
+                <div class="mat-cell">
+                    {{sort.sorting_felid}}
+                </div>   
+                <div class="mat-cell">
+                    <div class="p-1 actions">          
+                        <button mat-mini-fab color="primary" (click)="openCategoryDialog(sort)" matTooltip="Edit">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(sort)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>      
+            </div>
+        </div>
+    </mat-card>
+
+    <!-- <div *ngIf="categories.length > 0" fxLayout="row wrap">
+        <div fxFlex="100"> 
+            <mat-card class="p-0 text-center">           
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div> -->
+</div>
+

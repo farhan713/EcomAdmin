@@ -1,0 +1,257 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.gt-md="25" class="px-1">
+    <mat-form-field appearance="outline">
+      <mat-label>Select Days</mat-label>
+      <mat-select [(ngModel)]="selectedDay" (selectionChange)="getData()">
+        <mat-option [value]="">-</mat-option>
+        <mat-option *ngFor="let day of days" [value]="day">
+          <span>{{ day }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Select Profile</mat-label>
+      <mat-select [(ngModel)]="selectedProfile" (selectionChange)="getData()">
+        <mat-option value="all">All</mat-option>
+        <mat-option
+          *ngFor="let item of proFiles"
+          [value]="item.label"
+        >
+          <span>{{ item.label }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row wrap">
+    <div fxFlex="100" class="p-1" *ngIf="serverRes">
+      <mat-card>
+        <mat-card-header fxLayoutAlign="center center">
+          <mat-card-subtitle>
+            <h2>Recommendation Funnel</h2>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <div fxLayout="row wrap">
+          <div fxFlex.gt-sm="33.33">
+            <mat-card class="for-car-mar">
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <h4>Recommendations</h4>
+                  <h4>&nbsp;</h4>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <div class="w-100 h-230p">
+                <div class="for-cir-cen">
+                  <img *ngIf="recPer > 0" class="img-graph" src="../../../assets/images/views.png" alt="">
+                  <img *ngIf="recPer == 0" class="img-graph" src="../../../assets/images/no_views.png" alt="">
+
+                  <!-- <circle-progress
+                    [percent]="recPer"
+                    [outerStrokeColor]="'#4882c2'"
+                    [outerStrokeGradientStopColor]="'#53a9ff'"
+                    [animation]="true"
+                    [title]="recPerTitle"
+                    [animationDuration]="1000"
+                  ></circle-progress> -->
+                </div>
+              </div>
+              <div class="allign-center">
+                <h2>{{ serverRes.Recommendations.total }}</h2>
+              </div>
+              <div class="parent-wrap">
+                <div class="">
+                  <div>Loggedin User</div>
+                  <div>Annonymous User</div>
+                </div>
+                <div class="">
+                  <div>{{ serverRes.Recommendations.Logged_user }}</div>
+                  <div>{{ serverRes.Recommendations.anonymous_user }}</div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="33.33">
+            <mat-card class="for-car-mar">
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <h4>Estimated Clicked Recommendations</h4>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <div class="w-100 h-230p">
+                <div class="for-cir-cen">
+                  <circle-progress
+                    [percent]="clickedPer"
+                    [animation]="true"
+                    [outerStrokeColor]="'#378d3b'"
+                    [title]="clickedPerTitle"
+                    [outerStrokeGradientStopColor]="'#378d3b'"
+                    [animationDuration]="1000"
+                  ></circle-progress>
+                </div>
+              </div>
+              <div class="allign-center">
+                <h2>{{ serverRes.Estimated_product_viewed.total }}</h2>
+              </div>
+              <div class="parent-wrap">
+                <div class="">
+                  <div>Loggedin User</div>
+                  <div>Annonymous User</div>
+                </div>
+                <div class="">
+                  <div>
+                    {{ serverRes.Estimated_product_viewed.Logged_user }}
+                  </div>
+                  <div>
+                    {{ serverRes.Estimated_product_viewed.anonymous_user }}
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="33.33">
+            <mat-card class="for-car-mar">
+              <mat-card-header>
+                <mat-card-subtitle>
+                  <h4>Estimated Purchases From Recommendations</h4>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <div class="w-100 h-230p">
+                <div class="for-cir-cen">
+                  <circle-progress
+                    [percent]="purchasedPer"
+                    [animation]="true"
+                    [title]="purchasedPerTitle"
+                    [animationDuration]="1000"
+                  ></circle-progress>
+                </div>
+              </div>
+              <div class="allign-center">
+                <h2>{{ serverRes.Estimated_purchase_count.total }}</h2>
+              </div>
+              <div class="parent-wrap">
+                <div class="">
+                  <div>Loggedin User</div>
+                  <div>Annonymous User</div>
+                </div>
+                <div class="">
+                  <div>
+                    {{ serverRes.Estimated_purchase_count.Logged_user }}
+                  </div>
+                  <div>
+                    {{ serverRes.Estimated_purchase_count.anonymous_user }}
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div fxFlex="100" class="p-1" *ngIf="serverResInteractions">
+      <mat-card>
+        <div fxLayout="row wrap">
+          
+          <div fxFlex.gt-sm="33.33">
+            <mat-card class="for-car-mar">
+              <mat-card-content class="text-style">Views </mat-card-content>
+
+              <div class="parent-wrap">
+                <div class="fir">
+                  <mat-icon style="font-size: 56px !important"
+                    >remove_red_eye</mat-icon
+                  >
+                </div>
+                <div class="">
+                  <div style="font-size: 24px; font-weight: bold">
+                    {{ serverResInteractions.Views }}
+                  </div>
+                  <!-- <div>
+                      Purchased
+                    </div> -->
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="33.33">
+            <mat-card class="for-car-mar">
+              <mat-card-content class="text-style">Revenue </mat-card-content>
+
+              <div class="parent-wrap">
+                <div class="fir">
+                  <mat-icon style="font-size: 56px !important"
+                    >credit_card</mat-icon
+                  >
+                </div>
+                <div class="">
+                  <div style="font-size: 24px; font-weight: bold">
+                    ${{ serverResInteractions.Revenue | number : '1.2-2'}}
+                  </div>
+                  <!-- <div>
+                      Purchased
+                    </div> -->
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="33.33">
+            <mat-card class="for-car-mar">
+              <mat-card-content class="text-style">Purchased</mat-card-content>
+
+              <div class="parent-wrap">
+                <div class="fir">
+                  <mat-icon style="font-size: 56px !important"
+                    >add_shopping_cart</mat-icon
+                  >
+                </div>
+                <div class="">
+                  <div style="font-size: 24px; font-weight: bold">
+                    {{ serverResInteractions.Purchased_items }}
+                  </div>
+                  <!-- <div>
+                      Purchased
+                    </div> -->
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div fxFlex="100" class="p-1" *ngIf="serverResInteractions">
+      <mat-card>
+        <div fxLayout="row wrap">
+          
+          <div  *ngIf="viewes_summery.length">
+            <!-- <mat-card class="for-car-mar"> -->
+            <!-- <mat-card-content class="text-style"
+                  > -->
+            Views Per day
+            <div>
+              <ngx-charts-bar-vertical
+                [view]="[900, 200]"
+                [scheme]="colorSchemes"
+                [results]="viewes_summery"
+                [gradient]="gradients"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegends"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel"
+                (select)="onSelect($event)"
+              >
+              </ngx-charts-bar-vertical>
+            </div>
+          </div>
+         
+        </div>
+      </mat-card>
+    </div>
+
+    <div fxFlex="100" fxFlex.gt-sm="70" class="p-1"></div>
+    <div fxFlex="100" fxFlex.gt-sm="30" class="p-1"></div>
+  </div>
+</div>

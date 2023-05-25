@@ -1,0 +1,549 @@
+<div fxLayout="row wrap" *ngIf="selectedProductData">
+    <div fxFlex="100" fxFlex.gt-md="35" fxFlex.md="45">
+        
+        <mat-card class="product-image" *ngIf="selectedProductData">
+            <mat-chip-list *ngIf="selectedProductData?.discount">
+                <mat-chip color="warn" selected="true">{{selectedProductData?.discount}}% OFF</mat-chip>
+            </mat-chip-list>
+            <button mat-icon-button (click)="openZoomViewer()" fxHide="false" fxHide.gt-md><mat-icon>fullscreen</mat-icon></button>
+            <img [src]="selectedProductData?.images[0].big" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)"/>
+        </mat-card>       
+
+        <div class="small-carousel"> 
+            <div class="swiper-container" [swiper]="config">
+                <div class="swiper-wrapper"> 
+                    <div *ngFor="let image of selectedProductData?.images" class="swiper-slide">
+                        <mat-card (click)="selectImage(image)" class="p-1">
+                            <img [src]="image.big" class="swiper-lazy"/>
+                            <!-- <div class="swiper-lazy-preloader"></div> -->
+                        </mat-card>
+                    </div>                    
+                </div>
+                <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
+                <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button> 
+            </div>
+        </div>
+
+
+    </div>
+    <div fxFlex="100" fxFlex.gt-md="45" fxFlex.md="55" ngClass.gt-sm="px-3 m-0" ngClass.sm="mt-2" ngClass.xs="mt-2" style="    overflow: scroll;
+    height: calc(100vh - 200px);
+    overflow-x: hidden;
+    ">
+        
+        <div #zoomViewer fxShow="false" fxShow.gt-md>
+            <mat-card *ngIf="zoomImage" class="zoom-viewer mat-elevation-z18" [ngStyle]="{'background-image': 'url(' + zoomImage + ')'}"></mat-card>
+        </div>
+
+        <h2>{{selectedProductData?.name | titlecase}}</h2>
+        <div class="py-1 lh">
+            <p><span class="text-muted fw-500">Category: </span><span>{{ ( appService.Data.categories | filterById : product?.categoryId )?.name }}</span></p>
+            <p><span class="text-muted fw-500">Availibility: </span><span>{{ (selectedProductData?.availibilityCount > 0) ? 'In stock':'Unavailable'}}</span></p>
+        </div>                 
+        <div class="py-1">
+            <app-rating [ratingsCount]="selectedProductData?.ratingsCount" [ratingsValue]="selectedProductData?.ratingsValue" [direction]="'row'"></app-rating>
+        </div>
+        <p class="py-1 text-muted lh" [innerHtml]="selectedProductData.description"></p>
+        <a href="" class="achor-css">Read More..</a>
+        <div class="divider mt-1"></div>
+        <!-- <div class="py-1 lh">
+            <p><span class="text-muted fw-500">Deal of the Day </span></p>
+         
+               
+                <h2 class="new-price mat-top">-30% <span class="text-price">&#8377;47,990</span></h2>
+            
+        </div> -->
+        <div class="divider mt-1"></div>
+        <div class="brands-carousel"> 
+            <p><span class="text-muted fw-500">Offers </span></p>
+            <div class="swiper-container h-100" [swiper]="config">
+             
+                <div class="swiper-wrapper h-100">      
+                    <div class="swiper-slide" style="margin-right: 16px !important;
+                    border: 1px solid !important;
+                    padding: 12px !important;">
+                        <div class="p-0">
+                            <!-- <a [routerLink]="['/brands', brand.name]" (click)="sendMsg()" id="sendMsgs" class="brand-item">
+                                <img [attr.data-src]="brand.image" class="swiper-lazy">
+                            </a> -->
+                            <div>
+                                <div>No Cost EMI</div>
+                                <div>
+                                
+Upto ₹2,160.95 EMI interest savings on Amazon Pay ICICI Bank Credit Cards
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="p-0">
+                            <!-- <a [routerLink]="['/brands', brand.name]" (click)="sendMsg()" id="sendMsgs" class="brand-item">
+                                <img [attr.data-src]="brand.image" class="swiper-lazy">
+                            </a> -->
+                            <div>
+                                <div>No Cost EMI</div>
+                                <div>
+                                
+Upto ₹2,160.95 EMI interest savings on Amazon Pay ICICI Bank Credit Cards
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="p-0">
+                            <!-- <a [routerLink]="['/brands', brand.name]" (click)="sendMsg()" id="sendMsgs" class="brand-item">
+                                <img [attr.data-src]="brand.image" class="swiper-lazy">
+                            </a> -->
+                            <div>
+                                <div>No Cost EMI</div>
+                                <div>
+                                
+Upto ₹2,160.95 EMI interest savings on Amazon Pay ICICI Bank Credit Cards
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div> 
+                <button mat-icon-button class="swiper-button-prev swipe-arrow" id="keyboardLeft"><mat-icon>keyboard_arrow_left</mat-icon></button>
+                <button mat-icon-button class="swiper-button-next swipe-arrow" id="keboardRight"><mat-icon>keyboard_arrow_right</mat-icon></button> 
+            </div>
+        </div>
+        <div class="brands-carousel"> 
+            <p><span class="text-muted fw-500">Offers </span></p>
+            <div class="swiper-container h-100" [swiper]="config">
+             
+                <div class="swiper-wrapper h-100">      
+                    <div class="swiper-slide" style="margin-right: 16px !important;
+                    border: 1px solid !important;
+                    padding: 12px !important;">
+                  
+                            <!-- <a [routerLink]="['/brands', brand.name]" (click)="sendMsg()" id="sendMsgs" class="brand-item">
+                                <img [attr.data-src]="brand.image" class="swiper-lazy">
+                            </a> -->
+                            <div>
+                                <div class="i-cen"><span class="material-icons size-i">local_shipping</span></div>
+                                <div class="i-tit">
+                                
+                                 Free delivery
+                                </div>
+                            </div>
+                            
+                        </div>
+                   
+                    <div class="swiper-slide">
+                        
+                            <!-- <a [routerLink]="['/brands', brand.name]" (click)="sendMsg()" id="sendMsgs" class="brand-item">
+                                <img [attr.data-src]="brand.image" class="swiper-lazy">
+                            </a> -->
+                            <div>
+                                <div class="i-cen"><span class="material-icons size-i">published_with_changes</span></div>
+                                <div class="i-tit">
+                                
+                                 7 Days Relplacement
+                                </div>
+                            </div>
+                           
+                      
+                    </div>
+                    <div class="swiper-slide">
+                    
+                            <!-- <a [routerLink]="['/brands', brand.name]" (click)="sendMsg()" id="sendMsgs" class="brand-item">
+                                <img [attr.data-src]="brand.image" class="swiper-lazy">
+                            </a> -->
+                            <div>
+                                <div class="i-cen"><span class="material-icons size-i">local_shipping</span></div>
+                                <div class="i-tit">
+                                    1 Year Warranty
+
+                                </div>
+                            </div>
+                           
+                       
+                    </div>
+                </div> 
+                <button mat-icon-button class="swiper-button-prev swipe-arrow" id="keyboardLeft"><mat-icon>keyboard_arrow_left</mat-icon></button>
+                <button mat-icon-button class="swiper-button-next swipe-arrow" id="keboardRight"><mat-icon>keyboard_arrow_right</mat-icon></button> 
+            </div>
+        </div>
+        <!-- <div class="py-2">
+            <h3 class="old-price text-muted"><span *ngIf="selectedProductData?.oldPrice">${{selectedProductData?.oldPrice | number : '1.2-2'}}</span></h3>
+            <h2 class="new-price">${{selectedProductData?.newPrice}}</h2>
+        </div>        
+
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-1">
+            <div *ngIf="selectedProductData?.color" class="color">
+                <span class="fw-500">Select Color:</span>
+                <button mat-raised-button *ngFor="let color of selectedProductData?.color" [style.background]="color">&nbsp;</button>              
+            </div>
+            <div *ngIf="selectedProductData?.size" class="size" ngClass.xs="mt-1">
+                <span class="fw-500">Select Size:</span>
+                <button mat-raised-button *ngFor="let size of selectedProductData?.size">{{size}}</button>
+            </div>
+        </div> -->
+
+        <!-- <div class="py-1">
+            <app-controls [product]="selectedProductData" [type]="'all'"></app-controls> 
+        </div>
+
+        <div class="divider"></div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted py-1">
+            <button mat-button><mat-icon>mail_outline</mat-icon> Email to a Friend</button>
+            <button mat-icon-button><mat-icon>share</mat-icon></button>
+        </div> -->
+
+    </div>
+    <div fxFlex="100" fxFlex.gt-md="20" fxHide fxShow.gt-md> 
+
+        <div fxLayout="row wrap" class="info-bar" ngClass.gt-md="m-0">
+            <!-- <div fxFlex="100" fxFlex.md="25" fxFlex.sm="50">
+                <mat-card class="light-block" fxLayout="row"  fxLayoutAlign="start center">
+                    <mat-icon class="mat-icon-xlg text-muted m-0">card_giftcard</mat-icon>
+                    <div class="content">
+                        <p>BONUS PLUS</p> 
+                        <span class="text-muted m-0">Make fun of shopping and collect bonuses</span>
+                    </div> 
+                </mat-card> 
+            </div>
+            <div fxFlex="100" fxFlex.md="25" fxFlex.sm="50" class="mt-16"> 
+                <mat-card class="light-block" fxLayout="row"  fxLayoutAlign="start center">
+                    <mat-icon class="mat-icon-xlg text-muted m-0">local_shipping</mat-icon>
+                    <div class="content">
+                        <p>FREE SHIPPING</p> 
+                        <span class="text-muted m-0">Free shipping on all orders over $99</span>
+                    </div> 
+                </mat-card>
+            </div>
+            <div fxFlex="100" fxFlex.md="25"fxFlex.sm="50" class="mt-16"> 
+                <mat-card class="light-block" fxLayout="row"  fxLayoutAlign="start center">
+                    <mat-icon class="mat-icon-xlg text-muted m-0">monetization_on</mat-icon>
+                    <div class="content">
+                        <p>MONEY BACK GUARANTEE</p> 
+                        <span class="text-muted m-0">30 Days money return guarantee</span>
+                    </div> 
+                </mat-card>
+            </div>
+            <div fxFlex="100" fxFlex.md="25" fxFlex.sm="50" class="mt-16"> 
+                <mat-card class="light-block" fxLayout="row"  fxLayoutAlign="start center">
+                    <mat-icon class="mat-icon-xlg text-muted m-0">history</mat-icon>
+                    <div class="content">
+                        <p>ONLINE SUPPORT 24/7</p> 
+                        <span class="text-muted m-0">Call us: (+100) 123 456 7890</span>
+                    </div> 
+                </mat-card>
+            </div> -->
+            <div class="py-2">
+                <h3 class="old-price text-muted"><span *ngIf="selectedProductData?.oldPrice">${{selectedProductData?.oldPrice | number : '1.2-2'}}</span></h3>
+                <h2 class="new-price">${{selectedProductData?.newPrice}}</h2>
+            </div>        
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-1">
+            <div *ngIf="selectedProductData?.color" class="color">
+                <span class="fw-500">Select Color:</span>
+                <button mat-raised-button *ngFor="let color of selectedProductData?.color" [style.background]="color">&nbsp;</button>              
+            </div>
+            <div *ngIf="selectedProductData?.size" class="size" ngClass.xs="mt-1">
+                <span class="fw-500">Select Size:</span>
+                <button mat-raised-button *ngFor="let size of selectedProductData?.size">{{size}}</button>
+            </div>
+        </div>
+
+        <!-- <div class="py-1">
+            <app-controls [product]="selectedProductData" [type]="'all'"></app-controls> 
+        </div> -->
+        <div class="py-1">
+            
+              <div class="for-button-set">
+                <div class="for-marg">
+            <span class="fw-500">Quantity:</span>
+        </div>
+        <div>
+              <mat-form-field appearance="none">
+               
+                <select matNativeControl required>
+                  <option value="volvo">1</option>
+                  <option value="saab">2</option>
+                  <option value="mercedes">3</option>
+                  <option value="audi">4</option>
+                </select>
+             </mat-form-field>
+            </div>
+            </div>
+        </div>
+        
+        <div (click)="addTocart(selectedProductData)" fxLayout="row" id="divAddTo" fxLayoutAlign="space-between center" class="text-muted add">
+            <a mat-raised-button color="primary" class="mt-2 size" id="addToCar">Add To Cart</a>
+            
+        </div>
+        <div fxLayout="row" (click)="addToWish(selectedProductData)" id="divBuyNow" fxLayoutAlign="space-between center" class="text-muted addwish">
+            <a mat-raised-button  class="mt-2 size bg-cl" id="btnBuyNow">Buy Now</a>
+            
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center" id="divselectLocation" class="text-muted addwish">
+            <div class="locat" id="mainSelLocation">
+            <span class="material-icons">location_on</span>Select delivery location  
+        </div>
+        </div>
+        <div class="py-2">
+       
+            <h2 class="new-price price-bot">In stock</h2>
+            <div>
+                Sold by <a href="" class="in-stock">Appario Retail Private Ltd</a> and <a href="" class="in-stock">Fulfilled by Amazon.</a>
+            </div>
+        </div>  
+        <div fxLayout="row" (click)="addToWish(selectedProductData)" id="divAddWish" fxLayoutAlign="space-between center" class="text-muted addwish">
+            <a mat-raised-button  color="primary" class="mt-2 size" id="AddWishList">Add Wishlist</a>
+            
+        </div>
+        <div class="divider mt-1"></div>
+<!-- 
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted py-1">
+            <button mat-button><mat-icon>mail_outline</mat-icon> Email to a Friend</button>
+            <button mat-icon-button><mat-icon>share</mat-icon></button>
+        </div> -->
+        </div>
+
+    </div>
+</div>
+<div fxLayout="row wrap" class="mt-2" >
+    <div fxFlex="100" fxFlex.gt-md="78" fxFlex.md="74" *ngIf="algorythRealtedProduct.length > 1">
+        <mat-card class="info-bar">
+            
+                <div class="content ">
+               <p >Frequently Bought Toghether</p>
+              
+            </div>
+ <div class="parent" >
+    <div  class="mainWrap" >
+        <ng-container *ngIf="algorythRealtedProduct.length >= 3">
+        <div class="algowrap" *ngFor="let item of algorythRealtedProduct | slice:0:3">
+         <div >
+                <img style="    height: 80px;
+                width: 90px;" [src]="item.images[0].medium" />
+            </div>
+            <div >
+                <div >
+                    <mat-checkbox [disabled]="item.isDisabled" [checked]="item.checked"  (change)="AddProductinCart($event,item)" color="primary">
+                    </mat-checkbox> &nbsp;
+                   {{item.product}} : ${{item.newPrice}}
+                </div>
+                
+            </div>
+        </div>
+        </ng-container>
+        <ng-container *ngIf="algorythRealtedProduct.length < 3">
+            <div class="skeleton-container">
+                <div class="skeleton-container">
+                    <div class="skeleton-item"></div>
+                    <div>
+                      <div class="skeleton-item"></div>
+                    </div>
+                </div>
+            </div>
+          </ng-container>
+
+    
+            <!-- <div fxFlex="10" class="align">
+                +
+            </div> -->
+            <!-- <div fxFlex="20">
+                <img [src]="algorythRealtedProduct[2]?.images[0].medium" class="high-for"/>
+            </div> -->
+            <!-- <div fxFlex="10" class="align">
+               
+            </div> -->
+            <!-- <div fxFlex="20">
+
+            </div> -->
+    </div>
+
+    <div>
+     Price for all items ${{totalPrice}}
+     <div class="">
+        <a mat-raised-button color="primary" (click)="fpeAdtoCart(selectedProductData)" id="frequentAddTo" class="mt-2">Add To Cart</a>
+     </div>
+    </div>
+</div>
+
+
+<!-- <div fxLayout="row wrap" class="mt-2" *ngIf="algorythRealtedProduct.length">
+    <div id="divCheckBocAlgo">
+        <mat-checkbox id="checkBoxAlgo">
+        </mat-checkbox>&nbsp;{{algorythRealtedProduct[2].product}} ${{algorythRealtedProduct[2].price}}
+    </div>
+    
+</div> -->
+        </mat-card>
+    </div>
+</div>
+<div fxLayout="row wrap" class="mt-2" *ngIf="selectedProductData">
+    <div fxFlex="100" fxFlex.gt-md="78" fxFlex.md="74">
+        <mat-card> 
+            <mat-tab-group (selectedTabChange)="onTabSelected($event)">       
+                <mat-tab label="Description">
+                    <div class="full-desc lh" [innerHtml]="selectedProductData.description">
+                        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id nulla metus. Maecenas commodo turpis dui, porttitor tincidunt enim mollis a. Curabitur eu velit mi. Nullam congue turpis id metus sollicitudin, id cursus nulla laoreet. Proin commodo eu felis at malesuada. Nulla ac facilisis justo, eget vulputate ex. Nulla nec laoreet nulla. Cras auctor leo at diam congue, quis convallis urna pulvinar. Nunc ut mi nulla. Nunc ligula massa, vulputate sed scelerisque sit amet, dapibus semper est. Sed sed blandit turpis. Vestibulum id porttitor ligula, at iaculis ligula. Pellentesque vel tellus sit amet mauris aliquet bibendum id et lorem.</p>
+                        <ul class="px-2 mt-1">
+                            <li>Phasellus eu justo dictum, varius eros ut, posuere sapien.</li>
+                            <li>Nulla eu erat sit amet enim lobortis rhoncus.</li>
+                            <li>Etiam eu mauris in massa convallis ornare non id ex.</li>
+                            <li>Nam sagittis augue at pretium pharetra.</li>
+                            <li>Sed a sem id massa egestas porta a sit amet felis.</li>
+                            <li>Duis aliquam urna in sapien cursus consequat.</li>
+                        </ul>
+                        <p class="mt-1">Duis eu felis ultricies urna pharetra efficitur nec non elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur posuere eu justo eget mollis. Sed semper accumsan urna vel rutrum. Nulla condimentum quis lacus ut semper. Quisque at massa pretium, porta ligula ut, rutrum elit. Pellentesque et orci sit amet dolor laoreet tempor sed eu sem. Morbi lacinia pellentesque tellus euismod eleifend.</p>
+                        <p class="mt-1">Quisque fringilla eros id ligula luctus, a gravida augue sodales. Sed eget augue ut lectus condimentum volutpat. Morbi quis nunc viverra, gravida arcu quis, varius metus. Praesent tincidunt ipsum est, quis molestie ligula efficitur ut. Nunc interdum erat eu tortor maximus suscipit. Vivamus nec laoreet dui. Nullam dignissim laoreet metus quis pretium.</p> -->
+                    </div>
+                    <a href="" class="achor-css padd-anchor" id="readDes">Read More..</a>
+                </mat-tab>
+                <mat-tab tab="sendMsg()"  label="Additional information" >
+                    <div class="full-desc lh">
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <ul class="px-2 mt-1">
+                            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                            <li>Aenean vehicula, tortor gravida elementum tincidunt, justo lorem vestibulum ex, eget egestas arcu tellus in magna. Vivamus gravida, ipsum vel luctus luctus, nisi felis vestibulum est, nec interdum tellus leo quis tellus. Sed sit amet convallis enim, in laoreet orci.</li>
+                            <li>Donec et elit at nulla congue interdum sit amet varius erat.</li>
+                            <li>Nulla sit amet risus pellentesque, dignissim massa ut, dignissim arcu.</li>
+                            <li>Morbi dapibus ligula at faucibus tempus. Aenean vehicula, tortor gravida elementum tincidunt, justo lorem vestibulum ex, eget egestas arcu tellus in magna. Vivamus gravida, ipsum vel luctus luctus, nisi felis vestibulum est, nec interdum tellus leo quis tellus. Sed sit amet convallis enim, in laoreet orci.</li>
+                            <li>Nunc sodales justo ut nisi euismod, quis condimentum leo varius.</li>
+                        </ul>
+                        <ul class="px-2 mt-1">
+                            <li>Phasellus eu justo dictum, varius eros ut, posuere sapien.</li>
+                            <li>Nulla eu erat sit amet enim lobortis rhoncus.</li>
+                            <li>Etiam eu mauris in massa convallis ornare non id ex.</li>
+                            <li>Nam sagittis augue at pretium pharetra.</li>
+                            <li>Sed a sem id massa egestas porta a sit amet felis.</li>
+                            <li>Duis aliquam urna in sapien cursus consequat. Aenean vehicula, tortor gravida elementum tincidunt, justo lorem vestibulum ex, eget egestas arcu tellus in magna. Vivamus gravida, ipsum vel luctus luctus, nisi felis vestibulum est, nec interdum tellus leo quis tellus. Sed sit amet convallis enim, in laoreet orci.</li>
+                        </ul>
+                        <a href="" class="achor-css" id="readFullDesc">Read More..</a>
+                    </div>
+                
+
+                </mat-tab>
+               
+                <mat-tab label="Reviews"  (click)="sendMsg()" id="labSendMsg">
+                    <div class="full-desc lh" (click)="sendMsg()" id="fullDesMsg">
+                        <mat-list class="reviews">
+                            <mat-list-item class="h-100 py-1">
+                                <img matListAvatar [src]="'assets/images/avatars/avatar-1.png'" alt="image" class="review-author">
+                                <p matLine fxLayoutAlign="start center">
+                                    <span class="fw-500">Bruno Vespa</span> 
+                                    <mat-icon class="text-muted px-1" matTooltip="Dissatisfied" matTooltipPosition="after">sentiment_dissatisfied</mat-icon>
+                                </p>
+                                <p matLine class="text-muted"><small>13 January, 2018 at 7:09</small></p>
+                                <p matLine class="text">Integer id eros et mi fringilla imperdiet. In dictum turpis eget magna viverra condimentum. Ut malesuada interdum ultrices. Proin tristique sem pellentesque, posuere dui in, maximus magna. Aenean vehicula, tortor gravida elementum tincidunt, justo lorem vestibulum ex, eget egestas arcu tellus in magna.</p>
+                                <a></a>
+                            </mat-list-item>
+                            <mat-list-item class="h-100 py-1">
+                                <img matListAvatar [src]="'assets/images/avatars/avatar-2.png'" alt="image" class="review-author">
+                                <p matLine fxLayoutAlign="start center">
+                                    <span class="fw-500">Julia Aniston</span> 
+                                    <mat-icon class="text-muted px-1" matTooltip="Very Satisfied" matTooltipPosition="after">sentiment_very_satisfied</mat-icon>
+                                </p>
+                                <p matLine class="text-muted"><small>04 February, 2018 at 10:22</small></p>
+                                <p matLine class="text">Nulla accumsan, lacus sed suscipit rutrum, turpis augue accumsan metus, in accumsan urna mi vehicula lorem. Pellentesque semper nibh vitae augue placerat finibus. Nulla sed porttitor nunc, quis tristique sem. Quisque in varius nisl. Integer turpis lorem, ultricies sed sem nec, commodo molestie arcu. Nulla finibus ex tortor, et suscipit magna semper consectetur. Cras sit amet metus dui. Maecenas eget dui at ex varius malesuada vel non felis.</p>
+                            </mat-list-item>
+                            <mat-list-item class="h-100 py-1">
+                                <img matListAvatar [src]="'assets/images/avatars/avatar-3.png'" alt="image" class="review-author">
+                                <p matLine fxLayoutAlign="start center">
+                                    <span class="fw-500">Andy Warhol</span> 
+                                    <mat-icon class="text-muted px-1" matTooltip="Neutral" matTooltipPosition="after">sentiment_neutral</mat-icon>
+                                </p>
+                                <p matLine class="text-muted"><small>14 February, 2018 at 11:10</small></p>
+                                <p matLine class="text">Pellentesque hendrerit vel turpis aliquam placerat. Suspendisse ullamcorper congue feugiat. Etiam gravida metus ac massa posuere venenatis. Pellentesque vehicula lobortis dolor, ac pretium dolor maximus quis. Fusce vitae iaculis mauris, quis posuere ex. Mauris vitae convallis nibh. Etiam eget enim at orci interdum maximus nec in ante.</p>
+                            </mat-list-item>
+                        </mat-list>
+                        
+                        <h3 class="mt-2">LEAVE YOUR REVIEW</h3>
+                        <div class="divider"></div>
+                        <p class="mt-2 text-muted">Your email address will not be published. Required fields are marked *</p>
+                        <h3 fxLayoutAlign="start center" class="mt-2">
+                            <span>Your Rating:</span>
+                            <button mat-icon-button matTooltip="Very Dissatisfied" matTooltipPosition="above"><mat-icon class="mat-icon-lg">sentiment_very_dissatisfied</mat-icon></button>
+                            <button mat-icon-button matTooltip="Dissatisfied" matTooltipPosition="above"><mat-icon class="mat-icon-lg">sentiment_dissatisfied</mat-icon></button>
+                            <button mat-icon-button matTooltip="Neutral" matTooltipPosition="above"><mat-icon class="mat-icon-lg">sentiment_neutral</mat-icon></button>
+                            <button mat-icon-button matTooltip="Satisfied" matTooltipPosition="above"><mat-icon class="mat-icon-lg">sentiment_satisfied</mat-icon></button>
+                            <button mat-icon-button matTooltip="Very Satisfied" matTooltipPosition="above"><mat-icon class="mat-icon-lg">sentiment_very_satisfied</mat-icon></button>
+                        </h3>
+
+                        <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" fxLayout="row wrap">
+                            <div fxFlex="100" class="px-1 mt-1">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Your review</mat-label>
+                                    <textarea matInput placeholder="Your review" formControlName="review" required rows="5"></textarea>
+                                    <mat-error *ngIf="form.controls.review.errors?.required">Review is required</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="50" class="px-1 mt-2">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Your name</mat-label>
+                                    <input matInput placeholder="Your name" formControlName="name" required>
+                                    <mat-error *ngIf="form.controls.name.errors?.required">Name is required</mat-error>
+                                    <mat-error *ngIf="form.controls.name.hasError('minlength')">Name isn't long enough, minimum of 4 characters</mat-error>
+                                </mat-form-field> 
+                            </div>
+                            <div fxFlex="100" fxFlex.gt-sm="50" class="px-1 mt-2">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Your email</mat-label>
+                                    <input matInput placeholder="Your email" formControlName="email" required>
+                                    <mat-error *ngIf="form.controls.email.errors?.required">Email is required</mat-error>
+                                    <mat-error *ngIf="form.controls.email.hasError('invalidEmail')">Invalid email address</mat-error>
+                                </mat-form-field> 
+                            </div>
+                            <div fxFlex="100" class="mt-2 text-center w-100">
+                                <button mat-raised-button color="primary" id="subReview" type="submit">SUBMIT REVIEW</button>
+                            </div>
+                        </form>
+
+                        
+                    </div>
+                </mat-tab>
+          
+            </mat-tab-group>
+        </mat-card>
+    </div>
+    <!-- <div fxFlex="100" fxFlex.gt-md="22" fxFlex.md="26" ngClass.gt-sm="pl-3" fxHide fxShow.gt-sm>
+        <img src="https://via.placeholder.com/400x310/EEEEEE/9E9E9E/?text=Banner%201" alt="" class="mw-100 d-block">
+        <img src="https://via.placeholder.com/400x310/EEEEEE/9E9E9E/?text=Banner%202" alt="" class="mw-100 d-block mt-3">
+        <img src="https://via.placeholder.com/400x310/EEEEEE/9E9E9E/?text=Banner%203" alt="" class="mw-100 d-block mt-3">
+    </div> -->
+</div>
+
+<div class="py-2 mt-2" *ngIf="newRelatedProducts.length">
+    <h2>Check Out Similar Items</h2>
+    <div class="divider"></div>
+    <app-products-carousel [products]="newRelatedProducts"></app-products-carousel>
+</div>
+<div class="py-2 mt-2" *ngIf="newRelatedProductsKnn.length">
+    <h2>Discover more options</h2>
+    <div class="divider"></div>
+    <app-products-carousel [products]="newRelatedProductsKnn"></app-products-carousel>
+</div>
+
+<div class="py-2 mt-2" *ngIf="youMay.length">
+    <h2>You may also like</h2>
+    <div class="divider"></div>
+    <app-products-carousel [products]="youMay"></app-products-carousel>
+</div>
+
+<div class="py-2 mt-2" *ngIf="alsoBuyProducts.length">
+    <h2>Customers also viewed</h2>
+    <div class="divider"></div>
+    <app-products-carousel [products]="alsoBuyProducts"></app-products-carousel>
+</div>
+
+<div class="py-2 mt-2" *ngIf="exploreMoreProducts.length">
+    <h2>Explore More Items</h2>
+    <div class="divider"></div>
+    <app-products-carousel [products]="exploreMoreProducts"></app-products-carousel>
+</div>
+<div class="products-tabs" *ngIf="recommendMoreProducts.length">  
+    <h2>Recommend More Items</h2>
+    <div class="divider"></div>
+    <div  id="checkPageName">
+      <app-products-carousel  [products]="recommendMoreProducts"></app-products-carousel>
+    </div>
+   
+  </div>

@@ -1,0 +1,104 @@
+<div class="p-1">
+    <mat-card class="p-0"> 
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-2">
+            <h2>Recommendation Impact</h2> 
+            <!-- <button mat-raised-button color="primary" >Add Profile</button> -->
+            <mat-form-field appearance="outline" >
+                <mat-label>Select Type</mat-label>
+                <mat-select   [(ngModel)]="selectedValue" (selectionChange)="changeData($event.value)">
+                    
+                    <mat-option value="Non-Personalized">
+                        <span>Non-Personalized</span>
+                    </mat-option>
+                    <mat-option value="Personalized">
+                        <span>Personalized</span>
+                    </mat-option>
+                  
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Select Days</mat-label>
+                <mat-select [(ngModel)]="selectedDay" (selectionChange)="getRecomandationData($event.value)">
+                    <mat-option value="1">
+                        <span>1</span>
+                    </mat-option>
+                    <mat-option value="7">
+                        <span>7</span>
+                    </mat-option>
+                    <mat-option value="15">
+                        <span>15</span>
+                    </mat-option>
+                    <mat-option value="30">
+                        <span>30</span>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-divider></mat-divider>
+        <div *ngIf="isPersonalized" class="mat-table admin-table">
+            <div class="mat-header-row">
+                <div class="mat-header-cell" style="color: black;">Page Name</div>
+
+                <div class="mat-header-cell" style="color: black;"> Type</div>
+                <div class="mat-header-cell" style="color: black;">Product Click</div>
+                <div class="mat-header-cell" style="color: black;">CTA</div>
+                <!-- <div class="mat-header-cell" style="color: black;">Status</div>  -->
+                <div class="mat-header-cell" style="color: black;">Conversion Rate</div> 
+            
+              
+              
+                <div class="mat-header-cell" style="color: black;">Recommended Items</div>
+                <div class="mat-header-cell" style="color: black;">Revenue</div>
+
+            </div>
+            <div *ngFor="let item of personalizedData " class="mat-row">
+                <div class="mat-cell">{{item.page_name}}</div>
+                <div class="mat-cell">{{item.recommendation_type}}</div>
+                <div class="mat-cell">{{item.product_click}}</div>  
+                <div class="mat-cell">{{item.CTA}}</div>
+                <div class="mat-cell">{{item.conversion_rate}}</div>
+                <!-- <div class="mat-cell">{{item.CTA}}</div> -->
+                <div class="mat-cell">{{item.recommended_items}}</div> 
+                <div class="mat-cell">${{item.revenue}}</div>  
+                
+            </div>
+        </div>
+        <div *ngIf="!isPersonalized" class="mat-table admin-table">
+            <div class="mat-header-row">
+                <div class="mat-header-cell" style="color: black;">Page Name</div>
+
+                <div class="mat-header-cell" style="color: black;"> Type</div>
+                <div class="mat-header-cell" style="color: black;">Product Click</div>
+                <div class="mat-header-cell" style="color: black;">CTA</div>
+                <!-- <div class="mat-header-cell" style="color: black;">Status</div>  -->
+                <div class="mat-header-cell" style="color: black;">Conversion Rate</div> 
+            
+              
+              
+                <div class="mat-header-cell" style="color: black;">Recommended Items</div>
+                <div class="mat-header-cell" style="color: black;">Revenue</div>
+
+            </div>
+            <div *ngFor="let item of nonPersonalizedData " class="mat-row">
+                <div class="mat-cell">{{item.page_name}}</div>
+                <div class="mat-cell">{{item.recommendation_type}}</div>
+                <div class="mat-cell">{{item.product_click}}</div>  
+                <div class="mat-cell">{{item.CTA}}</div>
+                <div class="mat-cell">{{item.conversion_rate}}</div>
+                <!-- <div class="mat-cell">{{item.CTA}}</div> -->
+                <div class="mat-cell">{{item.recommended_items}}</div> 
+                <div class="mat-cell">${{item.revenue}}</div>  
+                
+            </div>
+        </div>
+    </mat-card>
+
+    <!-- <div *ngIf="categories.length > 0" fxLayout="row wrap">
+        <div fxFlex="100"> 
+            <mat-card class="p-0 text-center">           
+                <pagination-controls class="product-pagination" autoHide="true" maxSize="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div> -->
+</div>
+
