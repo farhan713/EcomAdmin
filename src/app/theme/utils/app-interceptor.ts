@@ -14,11 +14,14 @@ export class AppInterceptor implements HttpInterceptor {
 
         // this.spinner.show();
         const token = localStorage.getItem("token");
-        req = req.clone({
-          setHeaders: {
-            Authorization: "Bearer " + token,
-          },
-        });
+        if(token) {
+          req = req.clone({
+            setHeaders: {
+              Authorization: "Bearer " + token,
+            },
+          });
+        }
+      
         if (req.method !== 'GET') {
 
          let splitURL = req.url.split("/");
