@@ -2,7 +2,7 @@
     <div fxLayout="row wrap" style="justify-content: center !important;">
         <div fxFlex="100" fxFlex.gt-sm="50" class="p-2" *ngIf="signin">
             <h2 class="text-muted text-center">Sign In</h2>
-            <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit(loginForm.value)">
+            <form [formGroup]="loginForm" >
                 <mat-form-field appearance="outline" class="w-100 mt-2">
                     <mat-label>Email</mat-label>
                     <input matInput placeholder="Email" formControlName="email" required>
@@ -15,7 +15,7 @@
                     <mat-error *ngIf="loginForm.controls.password.errors?.required">Password is required</mat-error>
                     <mat-error *ngIf="loginForm.controls.password.hasError('minlength')">Password isn't long enough, minimum of 6 characters</mat-error>
                 </mat-form-field> 
-                <mat-form-field appearance="outline" class="w-100 mt-1">
+                <!-- <mat-form-field appearance="outline" class="w-100 mt-1">
                     <mat-label>Select Store</mat-label>
             <mat-select formControlName="orgnizationalId" (selectionChange)="getData($event.value)" >
                 <mat-option [value]="">-</mat-option>
@@ -23,7 +23,7 @@
                     <span>{{setting.org_name}}</span>
                 </mat-option>
             </mat-select>
-                </mat-form-field> 
+                </mat-form-field>  -->
                 <div class="text-center mt-2">
                     <button mat-fab color="primary" class="mat-elevation-z6" (click)="onLoginFormSubmit(loginForm.value)">
                         <mat-icon>exit_to_app</mat-icon>
