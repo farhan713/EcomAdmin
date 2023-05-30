@@ -120,17 +120,20 @@ export class AnalyticsComponent implements OnInit {
     this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/dashboard/search_impact_summary/' +  days).subscribe({
       next: data => {
         console.log(data);
-        data.dataset.revenue_on_days.forEach(element => {
+        if(data.dataset.revenue_on_days) {
+          data.dataset.revenue_on_days.forEach(element => {
 
-          const date = moment(element.date);
-          console.log(date.format('DD-MM-YYYY'));
-
-          this.sales_summary.push(
-            {name:date.format('DD-MM-YYYY'),
-            value:element.revenue
-          }
-          )
-        });
+            const date = moment(element.date);
+            console.log(date.format('DD-MM-YYYY'));
+  
+            this.sales_summary.push(
+              {name:date.format('DD-MM-YYYY'),
+              value:element.revenue
+            }
+            )
+          });
+        }
+    
         console.log( this.sales_summary);
         
         let vistPercentage = (data.dataset.visit_with_search / (data.dataset.visit_without_search + data.dataset.visit_with_search)) * 100;
@@ -144,6 +147,7 @@ export class AnalyticsComponent implements OnInit {
         
         (data.dataset.avg_order_value_with_search / data.dataset.avg_order_value_without_search)
         let orderImpact;
+        
         if (data.dataset.avg_order_value_without_search == 0){
           orderImpact = 0
         }else {orderImpact = (data.dataset.avg_order_value_with_search.toFixed(2) / data.dataset.avg_order_value_without_search.toFixed(2)).toFixed(1)}

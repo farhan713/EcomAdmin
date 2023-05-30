@@ -1,9 +1,11 @@
 import { Menu } from './menu.model'; 
 
+
+
 const userRole = localStorage.getItem("userType");
 console.log(userRole);
 let menuItems = []
-if(userRole == 'ADMIN') {
+if(localStorage.getItem("userType") == 'ADMIN') {
      menuItems = [ 
         new Menu (10, 'Dashboard', null, null, 'dashboard', null, true, 0),
         new Menu (11, 'Site Search', '/admin', null, 'dashboard', null, false, 10),
@@ -24,7 +26,7 @@ if(userRole == 'ADMIN') {
      
         new Menu (13, 'abcd', '/admin/add-user', null, 'local_atm', null, false, 0),
     ]
-} else if(userRole == 'CUSTOMER') {
+} else if(localStorage.getItem("userType") == 'CUSTOMER') {
     menuItems = [
         new Menu (10, 'Dashboard', null, null, 'dashboard', null, true, 0),
         new Menu (11, 'Site Search', '/admin', null, 'dashboard', null, false, 10),
@@ -33,7 +35,7 @@ if(userRole == 'ADMIN') {
         new Menu (30, 'Zero Search Results', '/admin/profile/zero-results', null, 'search', null, false, 0),
         new Menu (40, 'Top Searches', '/admin/top-searches', null, 'search', null, false, 0),
      ]
-} else if(userRole == 'SUPER_ADMIN') {
+} else if(localStorage.getItem("userType") == 'SUPER_ADMIN') {
     menuItems = [
         new Menu (10, 'Dashboard', null, null, 'dashboard', null, true, 0),
         new Menu (11, 'Site Search', '/admin', null, 'dashboard', null, false, 10),

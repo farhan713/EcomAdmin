@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { emailValidator, matchingPasswords } from '../../theme/utils/app-validators';
 import { HttpClient } from '@angular/common/http';
+import { log } from 'console';
 
 @Component({
   selector: 'app-sign-in',
@@ -24,7 +25,7 @@ export class SignInComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       'email': ['', Validators.compose([Validators.required, emailValidator])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      'orgnizationalId': ['', Validators.required],
+      // 'orgnizationalId': ['', Validators.required],
     });
 
     // this.registerForm = this.formBuilder.group({
@@ -50,7 +51,7 @@ export class SignInComponent implements OnInit {
   public onLoginFormSubmit(values: Object): void {
     console.log("Form Click Working");
 
-    let org_id = this.loginForm.controls.orgnizationalId.value;
+    // let org_id = this.loginForm.controls.orgnizationalId.value;
     let login = this.loginForm.controls.email.value;
     let password = this.loginForm.controls.password.value;
     console.log(password, "forms values");
@@ -58,19 +59,17 @@ export class SignInComponent implements OnInit {
     let org_id1 = "adadad";
     let role = "admin";
     // this.loginForm.value.email=="a@gmail.com" ? localStorage.setItem('userType', 'admin') : localStorage.setItem('userType', 'superadmin');
-    if (this.loginForm.valid) {
-      this.router.navigate(['/admin']).then(() => {
-        window.location.reload();
-      });
-    }
+    // if (this.loginForm.valid) {
+    //   this.router.navigate(['/admin']).then(() => {
+    //     // window.location.reload();
+    //   });
+    // }
 
     let data = {
       data_tables: [
         {
           "table_name": "tb_uservalidation",
           data: {
-
-            org_id: org_id,
             login: login,
             password: password
           }
@@ -80,15 +79,16 @@ export class SignInComponent implements OnInit {
     }
     this.http.post<any>('http://127.0.0.1:8000/console/customer_validation', { response: data }).subscribe({
       next: data => {
+        console.log(data.dataset.token)
         let roleName = data.role_name;
         let token = data.dataset.token;
         let orgId = data.dataset.org_id;
 
-        // location.reload();
+        // // location.reload();
         localStorage.setItem('userType', roleName);
         localStorage.setItem('token', token);
         localStorage.setItem('adminOrg', orgId);
-        this.router.navigate(['']);
+        this.router.navigate(['/admin']);
       },
       error: error => {
         console.log(error);

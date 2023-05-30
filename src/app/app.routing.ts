@@ -25,6 +25,7 @@ export const routes: Routes = [
     },
     { path: 'landing', loadChildren: () => import('./landing/landing.module').then(m => m.LandingModule) },
     { path: '', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate:[AuthGuard, RoleGuard]  },
+    { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate:[AuthGuard, RoleGuard]  },
     { path: '**', component: NotFoundComponent }
 ];
 

@@ -130,7 +130,7 @@ export class UsersComponent implements OnInit {
 
   getSortingList() {
     this.spinner.show()
-    this.http.get<any>('http://127.0.0.1:8000/console/dashboard/sorting_all').subscribe({
+    this.http.get<any>('http://127.0.0.1:8000/console/'+ this.clickService.getAdminOrgId() +'/dashboard/sorting_all').subscribe({
       next: data => {
         console.log(data);
         this.sortingListL = data.dataset;

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  private role = new BehaviorSubject<string>('');
 
   constructor() { }
   isLoggedIn(){
@@ -17,5 +20,14 @@ export class AuthService {
     }else{
       return false;
     }
+  }
+
+  
+  setValue(value: string) {
+    this.role.next(value);
+  }
+
+  getValue() {
+    return this.role.asObservable();
   }
 }
