@@ -12,5 +12,10 @@ export class UserMenuComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  logout(){
+    localStorage.removeItem("token");
+    localStorage.removeItem("userType")
+    this.router.navigate(['/sign-in'])
+  }
 
 }
