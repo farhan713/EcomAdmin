@@ -4,6 +4,7 @@ import { SortingDialogComponent } from './sorting-dialog/sorting-dialog.componen
 import { HttpClient } from '@angular/common/http';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { AlertDialogComponent } from 'src/app/shared/alert-dialog/alert-dialog.component';
+import { ClickStreamService } from 'src/app/shared/services/click-stream.service';
 
 @Component({
   selector: 'app-withdrawal',
@@ -24,7 +25,7 @@ export class WithdrawalComponent implements OnInit {
   // public page: any;
   // public count = 6;
 
-  constructor(public dialog: MatDialog ,private http : HttpClient , ) { }
+  constructor(public dialog: MatDialog ,private http : HttpClient ,private clickService: ClickStreamService ) { }
 
   ngOnInit(): void {
     this.getsortData();
@@ -57,7 +58,7 @@ export class WithdrawalComponent implements OnInit {
     });
   }
   getsortData() {
-    this.http.get<any>('http://127.0.0.1:8000/console/dashboard/sorting_all').subscribe({
+    this.http.get<any>('http://127.0.0.1:8000/console/'+ this.clickService.getAdminOrgId() +'/dashboard/sorting_all').subscribe({
       next: data => {
        
         this.sortingData =  data.dataset;
