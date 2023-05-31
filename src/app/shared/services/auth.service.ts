@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, EventEmitter, Output } from '@angular/core';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private role = new BehaviorSubject<string>('');
-
+  @Output() aClickedEvent = new EventEmitter<string>();
   constructor() { }
   isLoggedIn(){
     console.log(localStorage.getItem('token'));
@@ -22,12 +21,9 @@ export class AuthService {
     }
   }
 
+  AClicked(msg: string) {
+    this.aClickedEvent.emit(msg);
+  }
   
-  setValue(value: string) {
-    this.role.next(value);
-  }
-
-  getValue() {
-    return this.role.asObservable();
-  }
+ 
 }

@@ -135,8 +135,6 @@ export class UsersComponent implements OnInit {
         console.log(data);
         this.sortingListL = data.dataset;
     this.spinner.hide()
-        
-
       },
       error: error => {
         console.log(error);

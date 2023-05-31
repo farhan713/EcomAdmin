@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { emailValidator, matchingPasswords } from '../../theme/utils/app-validators';
 import { HttpClient } from '@angular/common/http';
 import { log } from 'console';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -19,7 +20,9 @@ export class SignInComponent implements OnInit {
   registerForm: FormGroup;
   roleData;
 
-  constructor(public formBuilder: FormBuilder, public router: Router, public snackBar: MatSnackBar, private http: HttpClient) { }
+  constructor(public formBuilder: FormBuilder, 
+    private service: AuthService,
+    public router: Router, public snackBar: MatSnackBar, private http: HttpClient) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -87,6 +90,10 @@ export class SignInComponent implements OnInit {
         // // location.reload();
         localStorage.setItem('userType', roleName);
         localStorage.setItem('token', token);
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+       
         localStorage.setItem('adminOrg', orgId);
         this.router.navigate(['/admin']);
       },
@@ -165,6 +172,8 @@ export class SignInComponent implements OnInit {
         //     val.status = true;
         //   }
         // })
+
+    
         this.orgId = tempData;
         console.log("org id here", this.orgId);
       },
