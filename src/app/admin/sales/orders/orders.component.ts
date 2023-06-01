@@ -127,8 +127,8 @@ export class OrdersComponent implements OnInit {
       if(dialogResult){
       this.http.delete<any>('http://127.0.0.1:8000/console/organization/'+category.org_id).subscribe({
       next: data => {
-        // this.getOrgdata();
-        // location.reload();
+        this.getOrgdata();
+        location.reload();
         
       },
       error: error => {
