@@ -13,17 +13,17 @@
         <mat-form-field class="user-search-input">
             <span></span>
             <input #menuTrigger="matMenuTrigger" (keyup)="filterByQueryNew($event)" [matMenuTriggerFor]="menu" matInput
-                placeholder="Search user by name..." [(ngModel)]="searchText" name="search">
+                placeholder="Search Celerant..." [(ngModel)]="searchText" name="search">
         </mat-form-field>
     </form>
     <div fxLayout="row" >
         <mat-form-field appearance="outline" class="w-100">
             <mat-label>Sorting</mat-label>
-          <mat-select placeholder="Select Sorting" [(ngModel)]="selectedSorting" (selectionChange)="updateSorting()">
+          <mat-select placeholder="Select Sorting" [(ngModel)]="selectedSorting" (selectionChange)="updateSorting($event.value)">
             <mat-option value="">
                 Default
                 </mat-option>
-            <mat-option *ngFor="let item of sortingListL" [value]="item.sorting_label">
+            <mat-option *ngFor="let item of sortingListL" [value]="item.sorting_id">
            {{item.sorting_felid | titlecase}}: {{item.sorting_label}}
             </mat-option>
           </mat-select>
@@ -107,9 +107,9 @@
     style="height: 200px !important; width: 200px !important;" [hasBackdrop]="false">
     <div fxLayout="row wrap" style="width: 60vw !important;" >
 
-        <div fxFlex="25" class="p-1" *ngFor="let item of serverRes" >
-            <div class="an"  (dblclick)="doubleClickKeyword(item.keyword)" (click)="changeByKeyword(item.keyword); $event.stopPropagation();">
-                <a mat-menu-item><b>{{item.keyword}}</b></a>
+        <div fxFlex="25" class="p-1" *ngFor="let item of keywordsList" >
+            <div class="an"  (dblclick)="cardDoubleClick(item)" (click)="cardClick(item); $event.stopPropagation();">
+                <a mat-menu-item><b>{{item}}</b></a>
                 <mat-divider></mat-divider>
 
             </div>

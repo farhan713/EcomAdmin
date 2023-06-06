@@ -38,7 +38,7 @@ export class UsersComponent implements OnInit {
   isSubtypeSelected: boolean = false;
 
   isOpen: boolean = false;
-  
+
 
   requestBody = {
     query: "",
@@ -46,7 +46,7 @@ export class UsersComponent implements OnInit {
     dept: [],
     type: [],
     subtype: [],
-    sorting_label:""
+    sorting_label: ""
   }
   productList: any = [];
   contentPlaceholder: MatMenuTrigger;
@@ -83,7 +83,7 @@ export class UsersComponent implements OnInit {
     'Episode VIII - The Last Jedi'
   ];
 
-  sortingListL:any = []
+  sortingListL: any = []
 
   sseCallTimer = 0;
   searchedQuery: any = '';
@@ -91,17 +91,18 @@ export class UsersComponent implements OnInit {
   serverRes: any;
   selectedKeyword: any = '';
   searchedProductList: any = [];
-  selectedSorting : any = "";
+  selectedSorting: any = "";
   pinnedFromSearchList: any = [];
   keyWordTobeSend: any = '';
   queryTobeSend: any = '';
   orgId: string | number;
+  keywordsList :any = [];
   constructor(public appSettings: AppSettings,
     public dialog: MatDialog,
     private http: HttpClient,
     private spinner: NgxSpinnerService,
-    public usersService: UsersService ,private clickService: ClickStreamService) {
-    this.settings = this.appSettings.settings; 
+    public usersService: UsersService, private clickService: ClickStreamService) {
+    this.settings = this.appSettings.settings;
   }
 
   @ViewChild("menuTrigger", { static: false }) set menuTrigger(
@@ -111,6 +112,7 @@ export class UsersComponent implements OnInit {
       this.contentPlaceholder = content;
     }
   }
+  matCard;
   ngOnInit() {
     this.orgId = this.clickService.getAdminOrgId();
     this.requestBody.query = '';
@@ -125,16 +127,16 @@ export class UsersComponent implements OnInit {
     // this.getAllAtributes();
     this.getSortingList();
     this.getProductList();
-   
+
   }
 
   getSortingList() {
     this.spinner.show()
-    this.http.get<any>('http://127.0.0.1:8000/console/'+ this.clickService.getAdminOrgId() +'/dashboard/sorting_all').subscribe({
+    this.http.get<any>('http://127.0.0.1:8000/console/' + this.clickService.getAdminOrgId() + '/dashboard/sorting_all').subscribe({
       next: data => {
         console.log(data);
         this.sortingListL = data.dataset;
-    this.spinner.hide()
+        this.spinner.hide()
       },
       error: error => {
         console.log(error);
@@ -149,13 +151,13 @@ export class UsersComponent implements OnInit {
     this.deptList = [];
     this.typeList = [];
     this.subTypeList = [];
-    this.http.post<any>('http://127.0.0.1:8000/console/'+this.orgId+'/site_search/site_setting/' + '1' + '/' + '1' + '/' + '500', { response: this.requestBody }).subscribe({
+    this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '500', { response: this.requestBody }).subscribe({
       next: data => {
         console.log(data);
         this.serverRes = data.dataset;
         if (this.requestBody.query != '') {
-          if(this.selectedKeyword == '') {
-            this.selectedKeyword =  this.serverRes[0].keyword
+          if (this.selectedKeyword == '') {
+            this.selectedKeyword = this.serverRes[0].keyword
           }
           console.log(this.selectedKeyword);
           this.keyWordTobeSend = this.selectedKeyword;
@@ -168,7 +170,7 @@ export class UsersComponent implements OnInit {
                 } else {
                   this.brandList.push({ isSelected: false, name: element })
                 }
-    
+
               });
               main.category_filter.dept.forEach(element => {
                 if (this.requestBody.dept.includes(element)) {
@@ -176,7 +178,7 @@ export class UsersComponent implements OnInit {
                 } else {
                   this.deptList.push({ isSelected: false, name: element })
                 }
-    
+
               });
               main.category_filter.type.forEach(element => {
                 if (this.requestBody.type.includes(element)) {
@@ -193,7 +195,7 @@ export class UsersComponent implements OnInit {
                 }
               });
               let demo = main.products;
-    
+
               const arrayUniqueByKey: any = [...new Map(demo.map(item =>
                 [item['product_id'], item])).values()];
               this.productList = arrayUniqueByKey;
@@ -261,16 +263,16 @@ export class UsersComponent implements OnInit {
   pushtoOld(product) {
     this.productList.unshift(product);
     this.searchedProductList.forEach(element => {
-      if(element.product_id == product.product_id){
+      if (element.product_id == product.product_id) {
         element.pinned = true;
       }
     });
     this.pinnedFromSearchList.push(product);
     console.log(this.pinnedFromSearchList);
-    
+
   }
 
-  closeSearchBox(){
+  closeSearchBox() {
     this.contentPlaceholder.closeMenu();
   }
   method2(product) {
@@ -287,7 +289,7 @@ export class UsersComponent implements OnInit {
   }
 
   getAllAtributes() {
-    this.http.get<any>('http://127.0.0.1:8000/'+this.clickService.getAdminOrgId()+'/all_attributes').subscribe({
+    this.http.get<any>('http://127.0.0.1:8000/' + this.clickService.getAdminOrgId() + '/all_attributes').subscribe({
       next: data => {
         console.log(data)
 
@@ -311,11 +313,11 @@ export class UsersComponent implements OnInit {
     })
 
   }
-  filterByQueryNew(e) { 
+  filterByQueryNew(e) {
     this.contentPlaceholder.closeMenu();
     this.searchedQuery = '';
     this.searchedQuery = e.target.value;
-    
+
     this.searchedProductList = []
     this.requestBody.query = e.target.value;
     if (this.interValChecker) {
@@ -329,46 +331,40 @@ export class UsersComponent implements OnInit {
         if (this.sseCallTimer >= 1) {
           if (e.keyCode == 13) {
             console.log(e.target.value);
-            
+
             clearInterval(this.interValChecker);
             this.contentPlaceholder.closeMenu();
             // this.goToCatBySearch(e.target.value);
-            this.requestBody.query = e.target.value;
+            this.requestBody.query = this.selectedKeyword;
             this.getProductList();
           } else {
             clearInterval(this.interValChecker)
-          let  request = {
-              query: e.target.value,
-              brand: [],
-              dept: [],
-              type: [],
-              subtype: [],
-              sorting_label:""
-            }
+           
             this.spinner.show()
-            this.http.post<any>('http://127.0.0.1:8000/console/'+this.orgId+'/site_search/site_setting/' + '1' + '/' + '1' + '/' + '100', { response: request }).subscribe({
+            this.http.post<any>('http://127.0.0.1:8000/sse/' + this.orgId + '/site_search/site_search_keywords/' + '1', { query: e.target.value }).subscribe({
               next: data => {
-                this.spinner.hide()
+                this.spinner.hide();
+                this.keywordsList = [];
                 this.contentPlaceholder.openMenu();
                 console.log(data);
-                this.serverRes = data.dataset;
-                this.selectedKeyword = data.dataset[0].keyword;
-                if(this.keyWordTobeSend === '') {
-                  this.keyWordTobeSend = data.dataset[0].keyword;
+                this.keywordsList = data.dataset
+                this.selectedKeyword = data.dataset[0];
+                if (this.keyWordTobeSend === '') {
+                  this.keyWordTobeSend = data.dataset[0];
                 }
-                if(this.queryTobeSend === '') {
+                if (this.queryTobeSend === '') {
                   this.queryTobeSend = e.target.value;
                 }
                 console.log(this.keyWordTobeSend);
-                
-                let demo = data.dataset[0].products;
-                const arrayUniqueByKey: any = [...new Map(demo.map(item =>
-                  [item['product_id'], item])).values()];
-                this.searchedProductList = arrayUniqueByKey;
-                this.searchedProductList.forEach(element => {
-                  element.image_url = 'https://www.mastgeneralstore.com/' + element.image_url;
-                  element["pinned"] = false;
-                });
+                this.selectKeyWord(this.selectedKeyword)
+                // let demo = data.dataset[0].products;
+                // const arrayUniqueByKey: any = [...new Map(demo.map(item =>
+                //   [item['product_id'], item])).values()];
+                // this.searchedProductList = arrayUniqueByKey;
+                // this.searchedProductList.forEach(element => {
+                //   element.image_url = 'https://www.mastgeneralstore.com/' + element.image_url;
+                //   element["pinned"] = false;
+                // });
               },
               error: error => {
                 console.log(error);
@@ -387,6 +383,63 @@ export class UsersComponent implements OnInit {
     }
   }
 
+selectKeyWord(keyword) {
+  this.selectedKeyword = keyword;
+  this.getProductsBykeyword(keyword)
+}
+
+selectKeyWord1(keyword) {
+  if (!this.matCard) return;
+  this.selectedKeyword = keyword;
+  this.getProductsBykeyword(keyword)
+}
+
+cardClick(keyword): void {
+  this.matCard = setTimeout( () => {this.selectKeyWord1(keyword);}, 300); 
+}
+cardDoubleClick(keyword): void {
+    clearTimeout(this.matCard);
+    this.matCard = undefined;
+    this.requestBody.query = keyword
+    this.doubleClickKeyword(keyword);
+}
+
+
+  getProductsBykeyword(keyword) {
+    console.log(keyword);
+    
+    let request = {
+      query: keyword,
+      brand: [],
+      dept: [],
+      type: [],
+      subtype: [],
+      sorting_label: ""
+    }
+    this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', { response: request }).subscribe({
+      next: data => {
+
+        this.contentPlaceholder.openMenu();
+        console.log(data);
+        this.serverRes = data.dataset;
+      
+     
+       
+        let demo = data.dataset[0].products;
+        const arrayUniqueByKey: any = [...new Map(demo.map(item =>
+          [item['product_id'], item])).values()];
+        this.searchedProductList = arrayUniqueByKey;
+        this.searchedProductList.forEach(element => {
+          element.image_url = 'https://www.mastgeneralstore.com/' + element.image_url;
+          element["pinned"] = false;
+        });
+      },
+      error: error => {
+        console.log(error);
+
+      }
+    })
+  }
   doubleClickKeyword(keyword) {
     console.log(this.requestBody);
     console.log(keyword);
@@ -420,7 +473,7 @@ export class UsersComponent implements OnInit {
             // this.goToCatBySearch(e.target.value)
           } else {
             clearInterval(this.interValChecker)
-            this.http.post<any>('http://127.0.0.1:8000/'+this.orgId+'/console/site_search/site_setting/' + '1' + '/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
+            this.http.post<any>('http://127.0.0.1:8000/' + this.orgId + '/console/site_search/site_setting/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
               next: data => {
                 console.log(data);
                 this.serverRes = data.dataset;
@@ -481,14 +534,25 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  updateSorting(){
+  updateSorting(item) {
+    console.log(item);
+    let selectedItem;
+this.sortingListL.forEach(element => {
+  console.log(element.sorting_id);
+  if(element.sorting_id == item) {
+    selectedItem = element
+  }
+});
+   console.log(selectedItem);
+   
+    
     console.log("in sorting");
     this.productList = [];
-    this.requestBody.sorting_label = this.selectedSorting;
+    this.requestBody.sorting_label = selectedItem.sorting_felid + ':' + selectedItem.sorting_label;
     console.log(this.selectedSorting);
 
-    if(this.requestBody.query =='') {
-      this.http.post<any>('http://127.0.0.1:8000/console/'+this.orgId+'/site_search/site_setting/' + '1' + '/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
+    if (this.requestBody.query == '') {
+      this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
         next: data => {
           this.serverRes = data.dataset;
           data.dataset[0].category_filter.brand.forEach(element => {
@@ -533,16 +597,17 @@ export class UsersComponent implements OnInit {
         },
         error: error => {
           console.log(error);
-  
+
         }
       })
     } else {
-      this.http.post<any>('http://127.0.0.1:8000/console/'+this.orgId+'/site_search/site_setting/' + '1' + '/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
+      
+      this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
         next: data => {
           this.serverRes = data.dataset;
           this.serverRes.forEach(element => {
-  
-  
+
+
             if (element.keyword == this.selectedKeyword) {
               console.log(element);
               let demo = element.products;
@@ -552,7 +617,7 @@ export class UsersComponent implements OnInit {
                 } else {
                   this.brandList.push({ isSelected: false, name: element })
                 }
-  
+
               });
               element.category_filter.dept.forEach(element => {
                 if (this.requestBody.dept.includes(element)) {
@@ -560,7 +625,7 @@ export class UsersComponent implements OnInit {
                 } else {
                   this.deptList.push({ isSelected: false, name: element })
                 }
-  
+
               });
               element.category_filter.type.forEach(element => {
                 if (this.requestBody.type.includes(element)) {
@@ -580,13 +645,13 @@ export class UsersComponent implements OnInit {
                 [item['product_id'], item])).values()];
               this.productList = arrayUniqueByKey;
               console.log("product list", this.productList);
-  
+
               this.productList.forEach(el => {
                 if (el.image_url.startsWith("https")) {
                 } else {
                   el.image_url = 'https://www.mastgeneralstore.com/' + el.image_url;
                 }
-  
+
                 el["pinned"] = false;
               });
             }
@@ -594,37 +659,37 @@ export class UsersComponent implements OnInit {
         },
         error: error => {
           console.log(error);
-  
+
         }
       })
     }
-    
-   
+
+
   }
 
   changeByKeyword(keyword) {
     this.contentPlaceholder.openMenu();
     this.selectedKeyword = keyword;
-        this.serverRes.forEach(element => {
-          if (element.keyword == keyword) {
-            console.log(element);
-            let demo = element.products;
-            const arrayUniqueByKey: any = [...new Map(demo.map(item =>
-              [item['product_id'], item])).values()];
-            this.searchedProductList = arrayUniqueByKey;
-            console.log("product list", this.productList);
+    this.serverRes.forEach(element => {
+      if (element.keyword == keyword) {
+        console.log(element);
+        let demo = element.products;
+        const arrayUniqueByKey: any = [...new Map(demo.map(item =>
+          [item['product_id'], item])).values()];
+        this.searchedProductList = arrayUniqueByKey;
+        console.log("product list", this.productList);
 
-            this.searchedProductList.forEach(el => {
-              if (el.image_url.startsWith("https")) {
-              } else {
-                el.image_url = 'https://www.mastgeneralstore.com/' + el.image_url;
-              }
-
-              el["pinned"] = false;
-            });
+        this.searchedProductList.forEach(el => {
+          if (el.image_url.startsWith("https")) {
+          } else {
+            el.image_url = 'https://www.mastgeneralstore.com/' + el.image_url;
           }
+
+          el["pinned"] = false;
         });
-    
+      }
+    });
+
   }
 
 
@@ -854,7 +919,7 @@ export class UsersComponent implements OnInit {
   }
 
   deleteProductFromList(product) {
-    this.productList.splice(this.productList.findIndex(({product_id}) => product_id == product.product_id), 1);
+    this.productList.splice(this.productList.findIndex(({ product_id }) => product_id == product.product_id), 1);
   }
 
   public getUsers(): void {
