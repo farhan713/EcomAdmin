@@ -6,6 +6,7 @@ import { emailValidator, matchingPasswords } from '../../theme/utils/app-validat
 import { HttpClient } from '@angular/common/http';
 import { log } from 'console';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-sign-in',
@@ -22,6 +23,7 @@ export class SignInComponent implements OnInit {
 
   constructor(public formBuilder: FormBuilder, 
     private service: AuthService,
+    private spinner: NgxSpinnerService,
     public router: Router, public snackBar: MatSnackBar, private http: HttpClient) { }
 
   ngOnInit() {
@@ -52,8 +54,9 @@ export class SignInComponent implements OnInit {
   }
 
   public onLoginFormSubmit(values: Object): void {
+    this.spinner.show();
     console.log("Form Click Working");
-
+    
     // let org_id = this.loginForm.controls.orgnizationalId.value;
     let login = this.loginForm.controls.email.value;
     let password = this.loginForm.controls.password.value;
@@ -96,10 +99,12 @@ export class SignInComponent implements OnInit {
        
         localStorage.setItem('adminOrg', orgId);
         this.router.navigate(['/admin']);
+        this.spinner.hide();
       },
       error: error => {
         console.log(error);
-
+        this.spinner.hide();
+        this.snackBar.open('user failed to sign up',  '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
       }
     })
   }
@@ -117,6 +122,7 @@ export class SignInComponent implements OnInit {
     })
   }
   public onRegisterFormSubmit(values: Object): void {
+    this.spinner.show();
     console.log("submit");
     let org_idup = this.registerForm.controls.orgnizationalIdup.value;
     let login = this.registerForm.controls.email.value;
@@ -146,13 +152,17 @@ export class SignInComponent implements OnInit {
     }
     this.http.post<any>('http://127.0.0.1:8000/console/customer_details', { response: data }).subscribe({
       next: data => {
-
+        this.spinner.hide();
+        this.signin = true;
+        this.signup = false;
+        this.snackBar.open('user sign up successfully',  '×', { panelClass: 'success', verticalPosition: 'top', duration: 5000 });
         // location.reload();
 
       },
       error: error => {
         console.log(error);
-
+        this.spinner.hide();
+        this.snackBar.open('user failed to sign up',  '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
       }
     })
 
