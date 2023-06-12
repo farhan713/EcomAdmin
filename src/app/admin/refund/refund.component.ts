@@ -43,4 +43,7 @@ changeData(val){
   }
  console.log( this.isPersonalized)
 }
+removeUnderscore(text: string): string {
+  return text.replace(/_/g, ' ');
+}
 }

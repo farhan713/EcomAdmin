@@ -52,7 +52,7 @@
 
             </div>
             <div *ngFor="let item of personalizedData " class="mat-row">
-                <div class="mat-cell">{{item.page_name}}</div>
+                <div class="mat-cell"> {{removeUnderscore(item.page_name)}}</div>
                 <div class="mat-cell">{{item.recommendation_type}}</div>
                 <div class="mat-cell">{{item.product_click}}</div>  
                 <div class="mat-cell">{{item.CTA}}</div>
@@ -80,7 +80,7 @@
 
             </div>
             <div *ngFor="let item of nonPersonalizedData " class="mat-row">
-                <div class="mat-cell">{{item.page_name}}</div>
+                <div class="mat-cell">{{removeUnderscore(item.page_name)}}</div>
                 <div class="mat-cell">{{item.recommendation_type}}</div>
                 <div class="mat-cell">{{item.product_click}}</div>  
                 <div class="mat-cell">{{item.CTA}}</div>
