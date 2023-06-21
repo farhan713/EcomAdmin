@@ -1,0 +1,319 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Settings</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+        
+        <mat-grid-list cols="4" rowHeight="100px">
+          <!-- Color Settings Row -->
+          <!-- <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="color" placeholder="Color" formControlName="color">
+              <mat-label class="custom-label">Color</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.color.errors?.required && settingsForm.controls.color.touched">
+              Color is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile> -->
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="color" placeholder="Left Content BG" formControlName="leftContentBG">
+              <mat-label class="custom-label">Left Content BG</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.leftContentBG.errors?.required && settingsForm.controls.leftContentBG.touched">
+              Left Content Bg is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              
+              <input matInput type="color" placeholder="Product Image BG" formControlName="productImageBG">
+              <mat-label class="custom-label">Product Image BG</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.productImageBG.errors?.required && settingsForm.controls.productImageBG.touched">
+              Product Image BG is required.
+             </mat-error>
+          </div>
+          </mat-grid-tile>
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="color" placeholder="Header Font Color" formControlName="headerFontColor">
+              <mat-label class="custom-label">Header Font Color</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.headerFontColor.errors?.required && settingsForm.   controls.headerFontColor.touched">
+              Header Font Color is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="color" placeholder="Content Font Color" formControlName="contentFontColor">
+              <mat-label class="custom-label">Content Font Color</mat-label>
+            </mat-form-field>
+
+            <mat-error *ngIf="settingsForm.controls.contentFontColor.errors?.required && settingsForm.controls.contentFontColor.touched">
+              Content Font Color is required.
+            </mat-error>
+          </div>
+
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="color" placeholder="See All Button BG" formControlName="seeAllButtonBG">
+              <mat-label class="custom-label">See All Button BG</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.seeAllButtonBG.errors?.required && settingsForm.controls.seeAllButtonBG.touched">
+              See All Button BG is required.
+            </mat-error>
+          </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="color" placeholder="See All Button Font Color" formControlName="seeAllButtonFontColor">
+              <mat-label class="custom-label">See All Button Font Color</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.seeAllButtonFontColor.errors?.required && settingsForm.controls.seeAllButtonFontColor.touched">
+              See All Button Font Color is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+  
+  
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="headerSize">
+              <mat-label class="custom-label">Header Size</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.headerSize.errors?.required && settingsForm.controls.headerSize.touched">
+              Header Size is required.
+            </mat-error>
+          </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+                <mat-select formControlName="headerFontWeight">
+                    <mat-option value="font-weight-bold">font-weight-bold</mat-option>
+                    <mat-option value="font-weight-normal">font-weight-normal</mat-option>
+                    <mat-option value="font-weight-light">font-weight-light</mat-option>
+                  </mat-select>
+                  <mat-label class="custom-label">Header Font Weight</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.headerFontWeight.errors?.required && settingsForm.controls.headerFontWeight.touched">
+              Header Font Weight is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="leftContentSize">
+              <mat-label class="custom-label">Left Content Size</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.leftContentSize.errors?.required && settingsForm.controls.leftContentSize.touched">
+              Left Content Size is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+                <mat-select formControlName="leftContentFontWeight">
+                    <mat-option value="font-weight-bold">font-weight-bold</mat-option>
+                    <mat-option value="font-weight-normal">font-weight-normal</mat-option>
+                    <mat-option value="font-weight-light">font-weight-light</mat-option>
+                  </mat-select>
+                  <mat-label class="custom-label">Left Content Font Weight</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.leftContentFontWeight.errors?.required && settingsForm.controls.leftContentFontWeight.touched">
+              Left Content Font Weight is required.
+            </mat-error>
+          </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="rightContentSize">
+              <mat-label class="custom-label">Right Content Size</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.rightContentSize.errors?.required && settingsForm.controls.rightContentSize.touched">
+              Left Content Size is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+                <mat-select formControlName="rightContentFontWeight">
+                    <mat-option value="font-weight-bold">font-weight-bold</mat-option>
+                    <mat-option value="font-weight-normal">font-weight-normal</mat-option>
+                    <mat-option value="font-weight-light">font-weight-light</mat-option>
+                  </mat-select>
+                  <mat-label class="custom-label">Right Content Font Weight</mat-label>
+            </mat-form-field>
+
+            <mat-error *ngIf="settingsForm.controls.rightContentFontWeight.errors?.required && settingsForm.controls.rightContentFontWeight.touched">
+              Right Content Font Weight is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="priceSize">
+              <mat-label class="custom-label">Price Size</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.priceSize.errors?.required && settingsForm.controls.priceSize.touched">
+              Price Size is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+                <mat-select formControlName="priceFontWeight">
+                    <mat-option value="font-weight-bold">font-weight-bold</mat-option>
+                    <mat-option value="font-weight-normal">font-weight-normal</mat-option>
+                    <mat-option value="font-weight-light">font-weight-light</mat-option>
+                  </mat-select>
+                  <mat-label class="custom-label">Price Font Weight</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.priceFontWeight.errors?.required && settingsForm.controls.priceFontWeight.touched">
+              Price Font Weight is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="cartButtonSize">
+              <mat-label class="custom-label">Cart Button Size</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.cartButtonSize.errors?.required && settingsForm.controls.cartButtonSize.touched">
+              Cart Button Size is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="seeAllButtonSize">
+              <mat-label class="custom-label">See All Button Size</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.seeAllButtonSize.errors?.required && settingsForm.controls.seeAllButtonSize.touched">
+              Cart Button Size is required.
+            </mat-error>
+            </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="seeAllButtonBorderWidth">
+              <mat-label class="custom-label">See All Button Border Width</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.seeAllButtonBorderWidth.errors?.required && settingsForm.controls.seeAllButtonBorderWidth.touched">
+              Button Border  is required.
+            </mat-error>
+          </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="seeAllButtonBorderRadius">
+              <mat-label class="custom-label">See All Button Border Radius</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.seeAllButtonBorderRadius.errors?.required && settingsForm.controls.seeAllButtonBorderRadius.touched">
+               Border  Radius is required.
+            </mat-error>
+          </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="headerUnderlineBorderWidth">
+              <mat-label class="custom-label">Header Underline Border Width</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.headerUnderlineBorderWidth.errors?.required && settingsForm.controls.headerUnderlineBorderWidth.touched">
+              Border Width is required.
+           </mat-error>
+           </div>
+          </mat-grid-tile>
+
+
+
+          <mat-grid-tile>
+            <div class="form-field">
+            <mat-form-field>
+              <input matInput type="number" formControlName="productImageBorderRadius">
+              <mat-label class="custom-label">Product Image Border Radius</mat-label>
+            </mat-form-field>
+            <mat-error *ngIf="settingsForm.controls.productImageBorderRadius.errors?.required && settingsForm.controls.productImageBorderRadius.touched">
+              Border Radius is required.
+           </mat-error>
+           </div>
+          </mat-grid-tile>
+
+
+
+        </mat-grid-list>
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </form>
+    </mat-card-content>
+  </mat-card>

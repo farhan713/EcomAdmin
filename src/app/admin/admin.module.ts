@@ -15,6 +15,8 @@ import { FullScreenComponent } from './components/fullscreen/fullscreen.componen
 import { MessagesComponent } from './components/messages/messages.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component'; 
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { StyleSettingsComponent } from './style-settings/style-settings.component';
+import { ReactiveFormsModule  ,FormsModule} from '@angular/forms';
 // import { AdduserComponent } from './adduser/adduser.component';
 
 export const routes = [ 
@@ -33,7 +35,9 @@ export const routes = [
       { path: 'rec-dashboard', loadChildren: () => import('./followers/followers.module').then(m => m.FollowersModule), data: { breadcrumb: 'Followers' } },
       { path: 'keywords', loadChildren: () => import('./support/support.module').then(m => m.SupportModule), data: { breadcrumb: 'Support' } },
       { path: 'top-searches', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule), data: { breadcrumb: 'Reviews' } },
-      { path: 'add-user', loadChildren: () => import('./adduser/adduser.module').then(m => m.AdduserModule), data: { breadcrumb: 'Adduser' } }  
+      { path: 'add-user', loadChildren: () => import('./adduser/adduser.module').then(m => m.AdduserModule), data: { breadcrumb: 'Adduser' } }  ,
+      {path : 'styles' , component : StyleSettingsComponent}
+  
     ]
   } 
 ];
@@ -46,6 +50,7 @@ export const routes = [
     FullScreenComponent,
     MessagesComponent,
     BreadcrumbComponent,
+    StyleSettingsComponent,
    //AdduserComponent
   ],
   imports: [
@@ -55,6 +60,8 @@ export const routes = [
     DragDropModule,
     InputFileModule.forRoot(config),
     NgCircleProgressModule.forRoot(),
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class AdminModule { }

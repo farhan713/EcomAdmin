@@ -24,7 +24,9 @@ if(localStorage.getItem("userType") == 'ADMIN') {
         new Menu (82, 'Create Org', '/admin/sales/orders', null, 'Multi-tenant', null, false, 91),
         new Menu (93, 'Create Store', '/admin/sales/transactions', null, 'Multi-tenant', null, false, 91),
      
-        new Menu (13, 'abcd', '/admin/add-user', null, 'local_atm', null, false, 0),
+        // new Menu (13, 'abcd', '/admin/add-user', null, 'local_atm', null, false, 0),
+        // new Menu (78, 'abcd', '/admin/add-user', null, 'local_atm', null, false, 0),
+        new Menu (111, 'styles', '/admin/styles', null, 'search', null, false, 0),
     ]
 } else if(localStorage.getItem("userType") == 'CUSTOMER') {
     menuItems = [
@@ -54,7 +56,7 @@ if(localStorage.getItem("userType") == 'ADMIN') {
         new Menu (82, 'Create Org', '/admin/sales/orders', null, 'Multi-tenant', null, false, 91),
         new Menu (93, 'Create Store', '/admin/sales/transactions', null, 'Multi-tenant', null, false, 91),
      
-        new Menu (13, 'abcd', '/admin/add-user', null, 'local_atm', null, false, 0),
+        new Menu (111, 'styles', '/admin/styles', null, 'search', null, false, 0),
      ]
 }
 
