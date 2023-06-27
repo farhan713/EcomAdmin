@@ -16,7 +16,7 @@ export class StyleSettingsComponent implements OnInit {
     this.settingsForm = this.formBuilder.group({
       // color: ['', Validators.required],
       leftContentBG: ['', Validators.required],
-      productImageBG: ['', Validators.required],
+      // productImageBG: ['', Validators.required],
       headerFontColor:['', Validators.required],
       contentFontColor: ['', Validators.required],
       seeAllButtonBG: ['', Validators.required],
@@ -34,9 +34,9 @@ export class StyleSettingsComponent implements OnInit {
       seeAllButtonBorderWidth: ['', Validators.required],
       seeAllButtonBorderRadius: ['', Validators.required],
       headerUnderlineBorderWidth: ['', Validators.required],
-      productImageBorderRadius:['', Validators.required],
+      // productImageBorderRadius:['', Validators.required],
     });
-    this.getOrgDetails();
+    this.getOrgStylesDetails();
   }
 
   logFormData(): void {
@@ -49,7 +49,7 @@ export class StyleSettingsComponent implements OnInit {
       color: {
         left_content_bg: formValues.leftContentBG,
         right_content_bg:formValues.rightContentBG,
-        product_image_bg: formValues.productImageBG,
+        // product_image_bg: formValues.productImageBG,
         header_font_color: formValues.headerFontColor,
         content_font_color: formValues.contentFontColor,
         see_all_button_bg: formValues.seeAllButtonBG,
@@ -68,9 +68,9 @@ export class StyleSettingsComponent implements OnInit {
         see_all_button: { font_size: '14px', button_size: formValues.seeAllButtonSize+'px' }
       },
       styling: {
-        see_all_button: { border_width: formValues.seeAllButtonBorderRadius+'px', border_radius: formValues.seeAllButtonBorderRadius+'px' },
+        see_all_button: { border_width: formValues.seeAllButtonBorderWidth+'px', border_radius: formValues.seeAllButtonBorderRadius+'px' },
         header_underline: { border_width: formValues.headerUnderlineBorderWidth+'px' },
-        product_image: { border_radius: formValues.productImageBorderRadius+'px' }
+        // product_image: { border_radius: formValues.productImageBorderRadius+'px' }
       }
     }
     
@@ -78,8 +78,10 @@ export class StyleSettingsComponent implements OnInit {
     this.http.post<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/search_ui_info',data ).subscribe({
       next: data => {
         this.snackBar.open('Settings are saved Successfully!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
-        this.getOrgDetails();
+        setTimeout(()=>{
+        this.getOrgStylesDetails();
         location.reload();
+        },100)
       },
       error: error => {
         console.log(error);
@@ -89,7 +91,7 @@ export class StyleSettingsComponent implements OnInit {
   }
 }
 
-getOrgDetails() {
+getOrgStylesDetails() {
   this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/search_ui_styling_info').subscribe({
     next: data => {
       console.log(data,"hi")
@@ -101,7 +103,7 @@ getOrgDetails() {
     
       this.settingsForm.patchValue({
         leftContentBG: formData.color.left_content_bg,
-        productImageBG: formData.color.product_image_bg,
+        // productImageBG: formData.color.product_image_bg,
         headerFontColor: formData.color.header_font_color,
         contentFontColor: formData.color.content_font_color,
         seeAllButtonBG: formData.color.see_all_button_bg,
@@ -120,7 +122,7 @@ getOrgDetails() {
         seeAllButtonBorderWidth: removePx(formData.styling.see_all_button.border_width),
         seeAllButtonBorderRadius: removePx(formData.styling.see_all_button.border_radius),
         headerUnderlineBorderWidth: removePx(formData.styling.header_underline.border_width),
-        productImageBorderRadius: removePx(formData.styling.product_image.border_radius)
+        // productImageBorderRadius: removePx(formData.styling.product_image.border_radius)
       });
     },
     error: error => {
