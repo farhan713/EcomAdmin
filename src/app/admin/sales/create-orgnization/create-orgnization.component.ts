@@ -14,10 +14,22 @@ export class CreateOrgnizationComponent implements OnInit {
   constructor( public fb: FormBuilder ,  @Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<CreateOrgnizationComponent> ,private http: HttpClient ,private clickService: ClickStreamService) { }
 
   ngOnInit(): void {
+
+    
     this.form = this.fb.group({
       org_name: ['', Validators.required],
       status: false,
-      orh_url : ['', Validators.required],
+      org_url : ['', Validators.required],
+      product_file_location : ['', Validators.required],
+
+      product_file_cron_time : ['', Validators.required],
+
+      trans_file_location : ['', Validators.required],
+
+      trans_file_cron_time : ['', Validators.required],
+      email_id : ['', Validators.email] ,
+
+
     }); 
 
     if(this.data.data){
@@ -51,7 +63,12 @@ export class CreateOrgnizationComponent implements OnInit {
                 "org_id": this.data.data.org_id,
                 "org_name": formValues.org_name,
                 "status": status,
-                "orh_url" :formValues.orh_url
+                "org_url" :formValues.orh_url,
+                "product_file_location" :formValues.product_file_location,
+                "product_file_cron_time":formValues.product_file_cron_time,
+                "trans_file_location":formValues.trans_file_location,
+                "trans_file_cron_time":formValues.trans_file_cron_time,
+                "email_id":formValues.email_id
               }
             }
           ]
@@ -66,7 +83,12 @@ export class CreateOrgnizationComponent implements OnInit {
                 org_id: -1,
                 "org_name": formValues.org_name,
                 "status": status,
-                "org_url" :formValues.orh_url
+                "org_url" :formValues.orh_url,
+                "product_file_location" :formValues.product_file_location,
+                "product_file_cron_time":formValues.product_file_cron_time,
+                "trans_file_location":formValues.trans_file_location,
+                "trans_file_cron_time":formValues.trans_file_cron_time,
+                "email_id":formValues.email_id
               }
             }
           ]
@@ -75,13 +97,16 @@ export class CreateOrgnizationComponent implements OnInit {
      
       this.http.post<any>('http://127.0.0.1:8000/console/organization',{response:data} ).subscribe({
         next: data => {
+          this.dialogRef.close(this.form.value);
         },
         error: error => {
           console.log(error);
+          // this.dialogRef.close(this.form.value);
+          alert("eror in creating org please try again")
   
         }
       })
-      this.dialogRef.close(this.form.value);
+      
     }
   }
 }
