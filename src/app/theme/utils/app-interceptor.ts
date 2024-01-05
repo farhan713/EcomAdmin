@@ -14,9 +14,6 @@ export class AppInterceptor implements HttpInterceptor {
 
         // this.spinner.show();
         const token = localStorage.getItem("token");
-        console.log("yash")
-        console.log(token)
-        console.log(req.url)
         if(token) {
           req = req.clone({
             setHeaders: {

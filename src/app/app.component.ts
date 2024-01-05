@@ -45,7 +45,6 @@ export class AppComponent {
 
     // Set the count on local storage
     localStorage.setItem('tabCount', tabCount.toString());
-    console.log("in intialize appp");
     this.getOrgdata()
 
 
@@ -111,7 +110,7 @@ export class AppComponent {
        this.getOrgDetails('d')
       },
       error: error => {
-        console.log(error);
+        // console.log(error);
 
       }
     })
@@ -128,7 +127,7 @@ export class AppComponent {
         // this.clickService.setOrganizationData(dataNew);
       },
       error: error => {
-        console.log(error);
+        // console.log(error);
 
       }
     })

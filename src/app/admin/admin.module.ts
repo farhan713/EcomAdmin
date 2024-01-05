@@ -17,6 +17,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StyleSettingsComponent } from './style-settings/style-settings.component';
 import { ReactiveFormsModule  ,FormsModule} from '@angular/forms';
+import { RouteSettingsComponent } from './route-settings/route-settings.component';
 // import { AdduserComponent } from './adduser/adduser.component';
 
 export const routes = [ 
@@ -36,7 +37,8 @@ export const routes = [
       { path: 'keywords', loadChildren: () => import('./support/support.module').then(m => m.SupportModule), data: { breadcrumb: 'Support' } },
       { path: 'top-searches', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule), data: { breadcrumb: 'Reviews' } },
       { path: 'add-user', loadChildren: () => import('./adduser/adduser.module').then(m => m.AdduserModule), data: { breadcrumb: 'Adduser' } }  ,
-      {path : 'styles' , component : StyleSettingsComponent}
+      {path : 'styles' , component : StyleSettingsComponent},
+      {path : 'route-settings' , component : RouteSettingsComponent}
   
     ]
   } 
@@ -51,6 +53,7 @@ export const routes = [
     MessagesComponent,
     BreadcrumbComponent,
     StyleSettingsComponent,
+    RouteSettingsComponent,
    //AdduserComponent
   ],
   imports: [

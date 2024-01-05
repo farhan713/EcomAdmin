@@ -24,6 +24,7 @@ export class SignInComponent implements OnInit {
   constructor(public formBuilder: FormBuilder, 
     private service: AuthService,
     private spinner: NgxSpinnerService,
+    private auth : AuthService,
     public router: Router, public snackBar: MatSnackBar, private http: HttpClient) { }
 
   ngOnInit() {
@@ -53,23 +54,9 @@ export class SignInComponent implements OnInit {
     this.getAllRoles();
   }
 
-  public onLoginFormSubmit(values: Object): void {
-    this.spinner.show();
-    console.log("Form Click Working");
-    
-    // let org_id = this.loginForm.controls.orgnizationalId.value;
+  public onLoginFormSubmit() {
     let login = this.loginForm.controls.email.value;
     let password = this.loginForm.controls.password.value;
-    console.log(password, "forms values");
-
-    let org_id1 = "adadad";
-    let role = "admin";
-    // this.loginForm.value.email=="a@gmail.com" ? localStorage.setItem('userType', 'admin') : localStorage.setItem('userType', 'superadmin');
-    // if (this.loginForm.valid) {
-    //   this.router.navigate(['/admin']).then(() => {
-    //     // window.location.reload();
-    //   });
-    // }
 
     let data = {
       data_tables: [
@@ -83,30 +70,16 @@ export class SignInComponent implements OnInit {
         }
       ]
     }
-    this.http.post<any>('http://127.0.0.1:8000/console/customer_validation', { response: data }).subscribe({
-      next: data => {
-        console.log(data.dataset.token)
-        let roleName = data.role_name;
-        let token = data.dataset.token;
-        let orgId = data.dataset.org_id;
-
-        // // location.reload();
-        localStorage.setItem('userType', roleName);
-        localStorage.setItem('token', token);
-        setTimeout(() => {
-          location.reload();
-        }, 1000);
-       
-        localStorage.setItem('adminOrg', orgId);
-        this.router.navigate(['/admin']);
-        this.spinner.hide();
-      },
-      error: error => {
-        console.log(error);
-        this.spinner.hide();
-        this.snackBar.open('user failed to sign up',  '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
-      }
+    this.auth.sendHttpPost('http://127.0.0.1:8000/console/customer_validation', data)
+    .then((loginApiCall) => {
+      console.log(loginApiCall);
+      // Handle the response here
     })
+    .catch((error) => {
+      console.log(error);
+      // Handle the error here
+    });
+  
   }
   getAllRoles() {
     this.http.get<any>('http://127.0.0.1:8000/console/all_customer_roles').subscribe({

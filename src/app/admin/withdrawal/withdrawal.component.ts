@@ -59,7 +59,7 @@ export class WithdrawalComponent implements OnInit {
   }
   getsortData() {
     this.http.get<any>('http://127.0.0.1:8000/console/'+ this.clickService.getAdminOrgId() +'/dashboard/sorting_all').subscribe({
-      next: data => {
+      next: data => {       
         this.sortingData =  data.dataset;
       },
       error: error => {
