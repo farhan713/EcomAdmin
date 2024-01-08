@@ -23,15 +23,10 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {  
-    console.log("admin module");
-    
     this.service.aClickedEvent
     .subscribe((token:string) => {
     
       if(token) {
-        console.log('Event message from Component A: ' + token);
-        console.log(localStorage.getItem("userType"));
-        
         if(localStorage.getItem("userType") == 'ADMIN') {
           this.menuItems = [ 
              new Menu (10, 'Dashboard', null, null, 'dashboard', null, true, 0),
@@ -84,7 +79,6 @@ export class AdminComponent implements OnInit {
              new Menu (13, 'abcd', '/admin/add-user', null, 'local_atm', null, false, 0),
           ]
      }
-     console.log();
      
       }
       
