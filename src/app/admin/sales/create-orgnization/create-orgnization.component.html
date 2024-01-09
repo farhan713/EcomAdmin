@@ -68,8 +68,15 @@
 
             <div fxFlex.gt-sm="50" class="widthwrap">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>product_file_cron_time</mat-label>
-                    <input matInput formControlName="product_file_cron_time" required>
+                    <mat-label>Product file Cron Time</mat-label>
+                    <mat-select formControlName="product_file_cron_time" [(ngModel)]="selectedIntervalProdFile"
+                    (selectionChange)="onChangeOfCroneTimeProdFile()"
+                  >
+                    <mat-option value="">-</mat-option>
+                    <mat-option *ngFor="let item of croneTimeList" [value]="item.value">
+                     {{item.label}}
+                    </mat-option>
+                  </mat-select>
                     <mat-error *ngIf="form.controls.product_file_cron_time.errors?.required">Domain Name is required</mat-error> 
                 </mat-form-field>
             </div>
@@ -86,8 +93,17 @@
 
             <div fxFlex.gt-sm="50" class="widthwrap">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>trans_file_cron_time</mat-label>
-                    <input matInput formControlName="trans_file_cron_time" required>
+                    <mat-label>Sales File cron Time</mat-label>
+
+                    <mat-select formControlName="trans_file_cron_time" [(ngModel)]="selectedIntervalSalesFile"
+                    (selectionChange)="onChangeOfCroneTimeSalesFile()"
+                  >
+                    <mat-option value="">-</mat-option>
+                    <mat-option *ngFor="let item of croneTimeList" [value]="item.value">
+                     {{item.label}}
+                    </mat-option>
+                  </mat-select>
+
                     <mat-error *ngIf="form.controls.trans_file_cron_time.errors?.required">Domain Name is required</mat-error> 
                 </mat-form-field>
             </div>

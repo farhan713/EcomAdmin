@@ -11,6 +11,12 @@ import { ClickStreamService } from 'src/app/shared/services/click-stream.service
 export class CreateOrgnizationComponent implements OnInit {
   public form: FormGroup;
   isEdit: boolean;
+  cronExpression: string;
+  selectedIntervalProdFile : any;
+  selectedIntervalSalesFile : any
+  croneTimeList : any = [];
+  salesFilecronExpression: string;
+  prodFilecronExpression: string;
   constructor( public fb: FormBuilder ,  @Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<CreateOrgnizationComponent> ,private http: HttpClient ,private clickService: ClickStreamService) { }
 
   ngOnInit(): void {
@@ -38,7 +44,10 @@ export class CreateOrgnizationComponent implements OnInit {
     }else{
       this.isEdit = false;
     }
+
+    this.generateCronTimeList();
   }
+
 
   public onSubmit(){
     console.log(this.form.value)
@@ -64,8 +73,8 @@ export class CreateOrgnizationComponent implements OnInit {
                 "org_name": formValues.org_name,
                 "status": status,
                 "org_url" :formValues.orh_url,
-                "product_file_location" :formValues.product_file_location,
-                "product_file_cron_time":formValues.product_file_cron_time,
+                "product_file_location" :this.prodFilecronExpression,
+                "product_file_cron_time":this.salesFilecronExpression,
                 "trans_file_location":formValues.trans_file_location,
                 "trans_file_cron_time":formValues.trans_file_cron_time,
                 "email_id":formValues.email_id
@@ -84,8 +93,8 @@ export class CreateOrgnizationComponent implements OnInit {
                 "org_name": formValues.org_name,
                 "status": status,
                 "org_url" :formValues.orh_url,
-                "product_file_location" :formValues.product_file_location,
-                "product_file_cron_time":formValues.product_file_cron_time,
+                "product_file_location" :this.prodFilecronExpression,
+                "product_file_cron_time":this.salesFilecronExpression,
                 "trans_file_location":formValues.trans_file_location,
                 "trans_file_cron_time":formValues.trans_file_cron_time,
                 "email_id":formValues.email_id
@@ -108,5 +117,24 @@ export class CreateOrgnizationComponent implements OnInit {
       })
       
     }
+  }
+
+  generateCronTimeList() {
+    for (let i = 1; i <= 48; i++) {
+      this.croneTimeList.push({
+        label: `Every ${i} Hour${i !== 1 ? 's' : ''}`,
+        value: i,
+      });
+    }
+    console.log(this.croneTimeList)
+  }
+
+  onChangeOfCroneTimeProdFile(){
+    this.prodFilecronExpression = `0 0 */${this.selectedIntervalProdFile} * * ?`;
+    console.log(this.prodFilecronExpression)
+  }
+  onChangeOfCroneTimeSalesFile(){
+    this.salesFilecronExpression = `0 0 */${this.selectedIntervalSalesFile} * * ?`;
+    console.log(this.salesFilecronExpression)
   }
 }
