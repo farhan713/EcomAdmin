@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from 'src/app/shared/services/auth.service';
 @Component({
   selector: 'app-create-store',
   templateUrl: './create-store.component.html',
@@ -11,7 +12,9 @@ export class CreateStoreComponent implements OnInit {
   isEdit: boolean;
   orgnizationData: any;
 
-  constructor( public fb: FormBuilder ,  @Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<CreateStoreComponent> ,private http: HttpClient) { }
+  constructor( public fb: FormBuilder , 
+    private auth: AuthService,
+     @Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<CreateStoreComponent> ,private http: HttpClient) { }
   public form: FormGroup;
   ngOnInit(): void {
     this.getOrgdata()
@@ -85,25 +88,17 @@ export class CreateStoreComponent implements OnInit {
     }
   }
   getOrgdata() {
-    this.http.get<any>('http://127.0.0.1:8000/console/all_organization_data').subscribe({
-      next: data => {
-
-
-        let tempData =  data.dataset;
-        tempData.forEach((val)=>{
-            // console.log(val)
-          if(val.status == "false"){
-            val.status = false
-          }else{
-            val.status = true;
-          }
-        })
-       this.orgnizationData = tempData;
-      },
-      error: error => {
-        console.log(error);
-
-      }
-    })
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/all_organization_data')
+    .then((respData) => {
+      let tempData =  respData.datalist;
+      tempData.forEach((val)=>{
+        if(val.status == "false"){
+          val.status = false
+        }else{
+          val.status = true;
+        }
+      })
+     this.orgnizationData = tempData;
+    }).catch((error) => { console.log(error) });
   }
 }

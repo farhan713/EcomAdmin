@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, Input} from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { ClickStreamService } from 'src/app/shared/services/click-stream.service';
 
 @Component({
@@ -10,7 +11,9 @@ import { ClickStreamService } from 'src/app/shared/services/click-stream.service
 export class MenuComponent implements OnInit {
   orgnizationData: any;
   
-  constructor(private http: HttpClient , private clickService: ClickStreamService) { }
+  constructor(private http: HttpClient ,
+    private auth: AuthService,
+     private clickService: ClickStreamService) { }
 
   ngOnInit() { this.getOrgdata()
   
@@ -29,15 +32,8 @@ export class MenuComponent implements OnInit {
 
 
   getOrgdata() {
-    this.http.get<any>('http://127.0.0.1:8000/console/all_organization_data').subscribe({
-      next: data => {
-       this.orgnizationData = data.dataset;
-      //  this.getOrgDetails('d')
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/all_organization_data')
+    .then((respData) => { this.orgnizationData = respData.datalist }).catch((error) => { console.log(error) });
   }
    
   getOrgDetails(id) {

@@ -53,7 +53,6 @@ export class ClickStreamService {
 
   updateProductTrack(key, value) {
     this.productTrack[key] = value;
-    console.log(this.productTrack);
     if (this.productTrack.id != '') {
       localStorage.setItem(this.productTrack.product, JSON.stringify(this.productTrack));
     }
@@ -110,18 +109,13 @@ export class ClickStreamService {
       ]
 
     }
-    // console.log(window.location.href);
    let myUrl = window.location.href.split('/')
 
 if(!myUrl.includes('admin')) {
-  // console.log(myUrl);
   this.http.post<any>('http://127.0.0.1:8000/console/user_visits', { response: data }).subscribe({
     next: data => {
-      // console.log(data);
     },
     error: error => {
-      console.log(error);
-
     }
   })
 }
@@ -160,7 +154,6 @@ if(!myUrl.includes('admin')) {
         productId : ''
       }
       for (const [key, value] of Object.entries(eventData)) {
-        // console.log(key, value);
         data[key] = value;
       }
       setTimeout(() => {
@@ -169,44 +162,17 @@ if(!myUrl.includes('admin')) {
 
     },
       err => {
-        // console.log(err);
       });
 
   }
 
 
-  // initializeWebSocketConnection() {
-  //   const app_url = 'http://localhost:8082/socket'
-  //   // console.log(app_url);
-  //   const ws = new SockJS(app_url);
-  //   this.stompClient = stomp.over(ws);
-  //   const that = this;
-  //   // tslint:disable-next-line:only-arrow-functions
-  //   this.stompClient.connect({}, function (frame: any) {
-  //     that.stompClient.subscribe('/message', (message: any) => {
-  //       if (message.body) {
-  //         // console.log(message);
-
-  //         // that.msg.push(message.body);
-  //       }
-  //     });
-  //   });
-  // }
 
   public connect(): void {
-    // console.log(
-    //   "in websocket"
-    // );
-
     if (!this.socket$ || this.socket$.closed) {
       this.socket$ = webSocket("ws://localhost:8000/app/message");
-
       this.socket$.subscribe((data: any) => {
-        // console.log(data)
-        // this.receivedData.push(data);
       }, err => {
-        console.log(err);
-
       });
     }
   }
@@ -225,7 +191,6 @@ if(!myUrl.includes('admin')) {
   }
   getAdminOrgId() {
     let orgId = localStorage.getItem("adminOrg");
-    console.log("here is the code ", orgId);
     if(orgId) {
       return orgId
     } else {

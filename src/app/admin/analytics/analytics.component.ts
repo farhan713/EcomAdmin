@@ -5,6 +5,7 @@ import { montly_sales } from '../analytics/analytics.data';
 import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
 import { ClickStreamService } from 'src/app/shared/services/click-stream.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 interface Food {
   value: string;
@@ -96,7 +97,9 @@ export class AnalyticsComponent implements OnInit {
   Top_grossing_searches = [
    
   ];
-  constructor(private http: HttpClient ,private clickService : ClickStreamService) { 
+  constructor(private http: HttpClient ,
+    private auth: AuthService,
+    private clickService : ClickStreamService) { 
     Object.assign(this, {refunds}); 
     // Object.assign(this, {sales_summary}); 
   }
@@ -116,12 +119,12 @@ export class AnalyticsComponent implements OnInit {
   }
 
   getData(days) {
-    this.sales_summary = [];
-    this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/dashboard/search_impact_summary/' +  days).subscribe({
-      next: data => {
-        console.log(data);
-        if(data.dataset.revenue_on_days) {
-          data.dataset.revenue_on_days.forEach(element => {
+
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/dashboard/search_impact_summary/' +  days)
+    .then((respData) => {
+      if(respData) {
+        if(respData.datalist.revenue_on_days) {
+          respData.datalist.revenue_on_days.forEach(element => {
 
             const date = moment(element.date);
             console.log(date.format('DD-MM-YYYY'));
@@ -136,35 +139,35 @@ export class AnalyticsComponent implements OnInit {
     
         console.log( this.sales_summary);
         
-        let vistPercentage = (data.dataset.visit_with_search / (data.dataset.visit_without_search + data.dataset.visit_with_search)) * 100;
+        let vistPercentage = (respData.datalist.visit_with_search / (respData.datalist.visit_without_search + respData.datalist.visit_with_search)) * 100;
         console.log(vistPercentage);
         
-        let orderPercentage = (data.dataset.orders_with_search / (data.dataset.orders_without_search + data.dataset.orders_with_search)) * 100;
+        let orderPercentage = (respData.datalist.orders_with_search / (respData.datalist.orders_without_search + respData.datalist.orders_with_search)) * 100;
         console.log(orderPercentage);
         
-        let revenuePercentage = (data.dataset.revenue_with_search / (data.dataset.revenue_without_search + data.dataset.revenue_with_search)) * 100;
+        let revenuePercentage = (respData.datalist.revenue_with_search / (respData.datalist.revenue_without_search + respData.datalist.revenue_with_search)) * 100;
         console.log(revenuePercentage);
         
-        (data.dataset.avg_order_value_with_search / data.dataset.avg_order_value_without_search)
+        (respData.datalist.avg_order_value_with_search / respData.datalist.avg_order_value_without_search)
         let orderImpact;
         
-        if (data.dataset.avg_order_value_without_search == 0){
+        if (respData.datalist.avg_order_value_without_search == 0){
           orderImpact = 0
-        }else {orderImpact = (data.dataset.avg_order_value_with_search.toFixed(2) / data.dataset.avg_order_value_without_search.toFixed(2)).toFixed(1)}
+        }else {orderImpact = (respData.datalist.avg_order_value_with_search.toFixed(2) / respData.datalist.avg_order_value_without_search.toFixed(2)).toFixed(1)}
         
 
-        (data.dataset.revenue_per_visit_with_search.toFixed(2) / data.dataset.revenue_per_visit_without_search.toFixed(2))
+        (respData.datalist.revenue_per_visit_with_search.toFixed(2) / respData.datalist.revenue_per_visit_without_search.toFixed(2))
         let revImpact;
-        if (data.dataset.revenue_per_visit_without_search == 0){
+        if (respData.datalist.revenue_per_visit_without_search == 0){
           revImpact = 0
-        }else {revImpact = (data.dataset.revenue_per_visit_with_search.toFixed(2) / data.dataset.revenue_per_visit_without_search.toFixed(2)).toFixed(1)}
+        }else {revImpact = (respData.datalist.revenue_per_visit_with_search.toFixed(2) / respData.datalist.revenue_per_visit_without_search.toFixed(2)).toFixed(1)}
 
 
-        (data.dataset.conversion_rate_with_search.toFixed(2) / data.dataset.conversion_rate_with_search.toFixed(2))
+        (respData.datalist.conversion_rate_with_search.toFixed(2) / respData.datalist.conversion_rate_with_search.toFixed(2))
         let conversionImpact;
-        if (data.dataset.conversion_rate_without_search == 0){
+        if (respData.datalist.conversion_rate_without_search == 0){
           conversionImpact = 0
-        }else {conversionImpact = (data.dataset.conversion_rate_with_search.toFixed(2) / data.dataset.conversion_rate_without_search.toFixed(2)).toFixed(1)}
+        }else {conversionImpact = (respData.datalist.conversion_rate_with_search.toFixed(2) / respData.datalist.conversion_rate_without_search.toFixed(2)).toFixed(1)}
         console.log(revenuePercentage);
 
 
@@ -172,10 +175,10 @@ export class AnalyticsComponent implements OnInit {
           {
             "name": "Visit",
             "value": vistPercentage,
-            "withSearch": data.dataset.visit_with_search,
-            "withoutSearch": data.dataset.visit_without_search,
-            "withSearchAverage":data.dataset.avg_order_value_with_search.toFixed(2),
-            "withoutAverage": data.dataset.avg_order_value_without_search.toFixed(2),
+            "withSearch": respData.datalist.visit_with_search,
+            "withoutSearch": respData.datalist.visit_without_search,
+            "withSearchAverage":respData.datalist.avg_order_value_with_search.toFixed(2),
+            "withoutAverage": respData.datalist.avg_order_value_without_search.toFixed(2),
             "orderImpact": orderImpact
           }
         ];
@@ -183,10 +186,10 @@ export class AnalyticsComponent implements OnInit {
           {
             "name": "Orders",
             "value": orderPercentage,
-            "withSearch": data.dataset.orders_with_search,
-            "withoutSearch": data.dataset.orders_without_search,
-            "withSearchAverage": data.dataset.revenue_per_visit_with_search.toFixed(2),
-            "withoutAverage": data.dataset.revenue_per_visit_without_search.toFixed(2),
+            "withSearch": respData.datalist.orders_with_search,
+            "withoutSearch": respData.datalist.orders_without_search,
+            "withSearchAverage": respData.datalist.revenue_per_visit_with_search.toFixed(2),
+            "withoutAverage": respData.datalist.revenue_per_visit_without_search.toFixed(2),
             "revImpact": revImpact
           }
         ];
@@ -194,19 +197,17 @@ export class AnalyticsComponent implements OnInit {
           {
             "name": "Revenue",
             "value": revenuePercentage,
-            "withSearch": data.dataset.revenue_with_search,
-            "withoutSearch":data.dataset.revenue_without_search,
-            "withSearchAverage": data.dataset.conversion_rate_with_search.toFixed(2),
-            "withoutAverage": data.dataset.conversion_rate_without_search.toFixed(2),
+            "withSearch": respData.datalist.revenue_with_search,
+            "withoutSearch":respData.datalist.revenue_without_search,
+            "withSearchAverage": respData.datalist.conversion_rate_with_search.toFixed(2),
+            "withoutAverage": respData.datalist.conversion_rate_without_search.toFixed(2),
             "conversionImpact": conversionImpact
           }
         ];
-      },
-      error: error => {
-        console.log(error);
-
       }
-    })
+    }).catch((error) => { console.log(error) });
+
+    this.sales_summary = [];
 
     this.transactions = [];
     this.Top_grossing_searches = [];

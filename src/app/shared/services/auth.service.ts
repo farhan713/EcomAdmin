@@ -44,9 +44,9 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.http.post<any>(reqUrl, { response: reqData })
         .subscribe(
-          (data) => {
+          (res) => {
             this.spinner.hide();
-            resolve(data.responseBody.data.dataset);
+            resolve(res.responseBody);
           },
           (error) => {
             this.spinner.hide();
@@ -57,15 +57,27 @@ export class AuthService {
     });
   }
 
-  sendHttpGet(reqUrl) {
-    this.http.get<any>(reqUrl).subscribe({
-      next: data => {
-        return data;
-      },
-      error: error => {
-        return error;
-      }
-    })
+  sendHttpGet(reqUrl): Promise<any> {
+    this.spinner.show();
+    return new Promise((resolve, reject) => {
+      this.http.get<any>(reqUrl)
+        .subscribe(
+          (res) => {
+            this.spinner.hide();
+            if(res) {
+              resolve(res.responseBody);
+            } else {
+              resolve(null);
+              this.snackBar.open("No Data Found...Please Try Again",  '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
+            } 
+          },
+          (error) => {
+            this.spinner.hide();
+            reject(error.error.responseHeader.message);
+            this.snackBar.open(error.error.responseHeader.message,  '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
+          }
+        );
+    });
   }
  
 }

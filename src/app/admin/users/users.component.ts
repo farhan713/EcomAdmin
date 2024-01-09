@@ -1,15 +1,13 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppSettings, Settings } from '../../app.settings';
-import { User, UserProfile, UserWork, UserContacts, UserSocial, UserSettings } from './user.model';
+import { User } from './user.model';
 import { UsersService } from './users.service';
 import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { HttpClient } from '@angular/common/http';
-import { Console, log } from 'console';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ClickStreamService } from 'src/app/shared/services/click-stream.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-users',
@@ -31,15 +29,11 @@ export class UsersComponent implements OnInit {
   selectedTypes: any = [];
   subTypeList: any = [];
   selectedSubtypes: any = [];
-
   isBrandSelected: boolean = false;
   isDeptSelected: boolean = false;
   isTypeSelected: boolean = false;
   isSubtypeSelected: boolean = false;
-
   isOpen: boolean = false;
-
-
   requestBody = {
     query: "",
     brand: [],
@@ -72,19 +66,7 @@ export class UsersComponent implements OnInit {
     }
   };
   user: any;
-  movies = [
-    'Episode I - The Phantom Menace',
-    'Episode II - Attack of the Clones',
-    'Episode III - Revenge of the Sith',
-    'Episode IV - A New Hope',
-    'Episode V - The Empire Strikes Back',
-    'Episode VI - Return of the Jedi',
-    'Episode VII - The Force Awakens',
-    'Episode VIII - The Last Jedi'
-  ];
-
   sortingListL: any = []
-
   sseCallTimer = 0;
   searchedQuery: any = '';
   interValChecker;
@@ -96,11 +78,11 @@ export class UsersComponent implements OnInit {
   keyWordTobeSend: any = '';
   queryTobeSend: any = '';
   orgId: string | number;
-  keywordsList :any = [];
+  keywordsList: any = [];
+
   constructor(public appSettings: AppSettings,
     public dialog: MatDialog,
-    private http: HttpClient,
-    private spinner: NgxSpinnerService,
+    private auth: AuthService,
     public usersService: UsersService, private clickService: ClickStreamService) {
     this.settings = this.appSettings.settings;
   }
@@ -121,28 +103,13 @@ export class UsersComponent implements OnInit {
     this.requestBody.dept = this.selectedDepts;
     this.requestBody.subtype = this.selectedSubtypes;
     this.requestBody.sorting_label = this.selectedSorting
-    console.log(this.requestBody);
-
-    // this.getUsers();  
-    // this.getAllAtributes();
     this.getSortingList();
     this.getProductList();
-
   }
 
   getSortingList() {
-    this.spinner.show()
-    this.http.get<any>('http://127.0.0.1:8000/console/' + this.clickService.getAdminOrgId() + '/dashboard/sorting_all').subscribe({
-      next: data => {
-        console.log(data);
-        this.sortingListL = data.dataset;
-        this.spinner.hide()
-      },
-      error: error => {
-        console.log(error);
-        this.spinner.hide()
-      }
-    })
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/' + this.clickService.getAdminOrgId() + '/dashboard/sorting_all')
+      .then((respData) => { this.sortingListL = respData.datalist }).catch((error) => { console.log(error) });
   }
 
   getProductList() {
@@ -151,15 +118,13 @@ export class UsersComponent implements OnInit {
     this.deptList = [];
     this.typeList = [];
     this.subTypeList = [];
-    this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '500', { response: this.requestBody }).subscribe({
-      next: data => {
-        console.log(data);
-        this.serverRes = data.dataset;
+    this.auth.sendHttpPost('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '500', this.requestBody)
+      .then((respData) => {
+        this.serverRes = respData.datalist;
         if (this.requestBody.query != '') {
           if (this.selectedKeyword == '') {
             this.selectedKeyword = this.serverRes[0].keyword
           }
-          console.log(this.selectedKeyword);
           this.keyWordTobeSend = this.selectedKeyword;
           this.queryTobeSend = this.searchedQuery;
           this.serverRes.forEach(main => {
@@ -170,7 +135,6 @@ export class UsersComponent implements OnInit {
                 } else {
                   this.brandList.push({ isSelected: false, name: element })
                 }
-
               });
               main.category_filter.dept.forEach(element => {
                 if (this.requestBody.dept.includes(element)) {
@@ -178,7 +142,6 @@ export class UsersComponent implements OnInit {
                 } else {
                   this.deptList.push({ isSelected: false, name: element })
                 }
-
               });
               main.category_filter.type.forEach(element => {
                 if (this.requestBody.type.includes(element)) {
@@ -195,7 +158,6 @@ export class UsersComponent implements OnInit {
                 }
               });
               let demo = main.products;
-
               const arrayUniqueByKey: any = [...new Map(demo.map(item =>
                 [item['product_id'], item])).values()];
               this.productList = arrayUniqueByKey;
@@ -206,38 +168,35 @@ export class UsersComponent implements OnInit {
             }
           })
         } else {
-          data.dataset[0].category_filter.brand.forEach(element => {
+          respData.datalist[0].category_filter.brand.forEach(element => {
             if (this.requestBody.brand.includes(element)) {
               this.brandList.push({ isSelected: true, name: element })
             } else {
               this.brandList.push({ isSelected: false, name: element })
             }
-
           });
-          data.dataset[0].category_filter.dept.forEach(element => {
+          respData.datalist[0].category_filter.dept.forEach(element => {
             if (this.requestBody.dept.includes(element)) {
               this.deptList.push({ isSelected: true, name: element })
             } else {
               this.deptList.push({ isSelected: false, name: element })
             }
-
           });
-          data.dataset[0].category_filter.type.forEach(element => {
+          respData.datalist[0].category_filter.type.forEach(element => {
             if (this.requestBody.type.includes(element)) {
               this.typeList.push({ isSelected: true, name: element })
             } else {
               this.typeList.push({ isSelected: false, name: element })
             }
           });
-          data.dataset[0].category_filter.subtype.forEach(element => {
+          respData.datalist[0].category_filter.subtype.forEach(element => {
             if (this.requestBody.subtype.includes(element)) {
               this.subTypeList.push({ isSelected: true, name: element })
             } else {
               this.subTypeList.push({ isSelected: false, name: element })
             }
           });
-          let demo = data.dataset[0].products;
-
+          let demo = respData.datalist[0].products;
           const arrayUniqueByKey: any = [...new Map(demo.map(item =>
             [item['product_id'], item])).values()];
           this.productList = arrayUniqueByKey;
@@ -246,19 +205,10 @@ export class UsersComponent implements OnInit {
             element["pinned"] = false;
           });
         }
-
-      },
-      error: error => {
-        console.log(error);
-
-      }
-    })
+      }).catch((error) => { console.log(error) });
   }
-  dropped(product, index) {
-    console.log(product);
-    console.log(index);
 
-  }
+  dropped(product, index) { }
 
   pushtoOld(product) {
     this.productList.unshift(product);
@@ -268,16 +218,13 @@ export class UsersComponent implements OnInit {
       }
     });
     this.pinnedFromSearchList.push(product);
-    console.log(this.pinnedFromSearchList);
-
   }
 
   closeSearchBox() {
     this.contentPlaceholder.closeMenu();
   }
+
   method2(product) {
-    console.log(product);
-    console.log(this.productList);
     let data = this.productList;
     data.unshift(data.splice(data.findIndex(item => item.product_id == product.product_id), 1)[0])
     this.productList = data;
@@ -289,125 +236,86 @@ export class UsersComponent implements OnInit {
   }
 
   getAllAtributes() {
-    this.http.get<any>('http://127.0.0.1:8000/' + this.clickService.getAdminOrgId() + '/all_attributes').subscribe({
-      next: data => {
-        console.log(data)
-
-        data.dataset[0].brand.forEach(element => {
+    this.auth.sendHttpGet('http://127.0.0.1:8000/' + this.clickService.getAdminOrgId() + '/all_attributes')
+      .then((respData) => {
+        respData.datalist[0].brand.forEach(element => {
           this.brandList.push({ isSelected: false, name: element })
         });
-        data.dataset[1].dept.forEach(element => {
+        respData.datalist[1].dept.forEach(element => {
           this.deptList.push({ isSelected: false, name: element })
         });
-        data.dataset[2].type.forEach(element => {
+        respData.datalist[2].type.forEach(element => {
           this.typeList.push({ isSelected: false, name: element })
         });
-        data.dataset[3].subtype.forEach(element => {
+        respData.datalist[3].subtype.forEach(element => {
           this.subTypeList.push({ isSelected: false, name: element })
         });
-      },
-      error: error => {
-        console.log(error);
-
-      }
-    })
-
+      }).catch((error) => { console.log(error) });
   }
+
   filterByQueryNew(e) {
     this.contentPlaceholder.closeMenu();
     this.searchedQuery = '';
     this.searchedQuery = e.target.value;
-
     this.searchedProductList = []
     this.requestBody.query = e.target.value;
     if (this.interValChecker) {
       this.sseCallTimer = 0;
       clearInterval(this.interValChecker)
     }
-
     if (e.target.value.length >= 3) {
       this.interValChecker = setInterval(() => {
         this.sseCallTimer++;
         if (this.sseCallTimer >= 1) {
           if (e.keyCode == 13) {
-            console.log(e.target.value);
-
             clearInterval(this.interValChecker);
             this.contentPlaceholder.closeMenu();
-            // this.goToCatBySearch(e.target.value);
             this.requestBody.query = this.selectedKeyword;
             this.getProductList();
           } else {
             clearInterval(this.interValChecker)
-           
-            this.spinner.show()
-            this.http.post<any>('http://127.0.0.1:8000/sse/' + this.orgId + '/site_search/site_search_keywords/' + '1', { query: e.target.value }).subscribe({
-              next: data => {
-                this.spinner.hide();
+            this.auth.sendHttpPost('http://127.0.0.1:8000/console/customer_validation', { query: e.target.value })
+              .then((respData) => {
                 this.keywordsList = [];
                 this.contentPlaceholder.openMenu();
-                console.log(data);
-                this.keywordsList = data.dataset
-                this.selectedKeyword = data.dataset[0];
+                this.keywordsList = respData.datalist
+                this.selectedKeyword = respData.datalist[0];
                 if (this.keyWordTobeSend === '') {
-                  this.keyWordTobeSend = data.dataset[0];
+                  this.keyWordTobeSend = respData.datalist[0];
                 }
                 if (this.queryTobeSend === '') {
                   this.queryTobeSend = e.target.value;
                 }
-                console.log(this.keyWordTobeSend);
                 this.selectKeyWord(this.selectedKeyword)
-                // let demo = data.dataset[0].products;
-                // const arrayUniqueByKey: any = [...new Map(demo.map(item =>
-                //   [item['product_id'], item])).values()];
-                // this.searchedProductList = arrayUniqueByKey;
-                // this.searchedProductList.forEach(element => {
-                //   element.image_url = 'https://www.mastgeneralstore.com/' + element.image_url;
-                //   element["pinned"] = false;
-                // });
-              },
-              error: error => {
-                console.log(error);
-
-              }
-            })
+              }).catch((error) => { console.log(error) });
           }
         }
-
       }, 1000);
-
-
-
-    } else {
-
     }
   }
 
-selectKeyWord(keyword) {
-  this.selectedKeyword = keyword;
-  this.getProductsBykeyword(keyword)
-}
+  selectKeyWord(keyword) {
+    this.selectedKeyword = keyword;
+    this.getProductsBykeyword(keyword)
+  }
 
-selectKeyWord1(keyword) {
-  if (!this.matCard) return;
-  this.selectedKeyword = keyword;
-  this.getProductsBykeyword(keyword)
-}
+  selectKeyWord1(keyword) {
+    if (!this.matCard) return;
+    this.selectedKeyword = keyword;
+    this.getProductsBykeyword(keyword)
+  }
 
-cardClick(keyword): void {
-  this.matCard = setTimeout( () => {this.selectKeyWord1(keyword);}, 300); 
-}
-cardDoubleClick(keyword): void {
+  cardClick(keyword): void {
+    this.matCard = setTimeout(() => { this.selectKeyWord1(keyword); }, 300);
+  }
+  cardDoubleClick(keyword): void {
     clearTimeout(this.matCard);
     this.matCard = undefined;
     this.requestBody.query = keyword
     this.doubleClickKeyword(keyword);
-}
-
+  }
 
   getProductsBykeyword(keyword) {
-    console.log(keyword);
-    
     let request = {
       query: keyword,
       brand: [],
@@ -416,16 +324,11 @@ cardDoubleClick(keyword): void {
       subtype: [],
       sorting_label: ""
     }
-    this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', { response: request }).subscribe({
-      next: data => {
-
+    this.auth.sendHttpPost('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', request)
+      .then((respData) => {
         this.contentPlaceholder.openMenu();
-        console.log(data);
-        this.serverRes = data.dataset;
-      
-     
-       
-        let demo = data.dataset[0].products;
+        this.serverRes = respData.datalist;
+        let demo = respData.datalist[0].products;
         const arrayUniqueByKey: any = [...new Map(demo.map(item =>
           [item['product_id'], item])).values()];
         this.searchedProductList = arrayUniqueByKey;
@@ -433,16 +336,10 @@ cardDoubleClick(keyword): void {
           element.image_url = 'https://www.mastgeneralstore.com/' + element.image_url;
           element["pinned"] = false;
         });
-      },
-      error: error => {
-        console.log(error);
-
-      }
-    })
+      }).catch((error) => { console.log(error) });
   }
+
   doubleClickKeyword(keyword) {
-    console.log(this.requestBody);
-    console.log(keyword);
     this.selectedKeyword = keyword;
     this.getProductList();
     this.contentPlaceholder.closeMenu();
@@ -461,7 +358,6 @@ cardDoubleClick(keyword): void {
       this.sseCallTimer = 0;
       clearInterval(this.interValChecker)
     }
-
     if (e.target.value.length >= 3) {
       this.interValChecker = setInterval(() => {
         this.sseCallTimer++;
@@ -470,39 +366,35 @@ cardDoubleClick(keyword): void {
             clearInterval(this.interValChecker);
             this.contentPlaceholder.closeMenu();
             this.getProductList();
-            // this.goToCatBySearch(e.target.value)
           } else {
             clearInterval(this.interValChecker)
-            this.http.post<any>('http://127.0.0.1:8000/' + this.orgId + '/console/site_search/site_setting/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
-              next: data => {
-                console.log(data);
-                this.serverRes = data.dataset;
-                let demo = data.dataset[0].products;
-                this.selectedKeyword = data.dataset[0].keyword;
-                data.dataset[0].category_filter.brand.forEach(element => {
+            this.auth.sendHttpPost('http://127.0.0.1:8000/' + this.orgId + '/console/site_search/site_setting/' + '1' + '/' + '100', this.requestBody)
+              .then((respData) => {
+                this.serverRes = respData.datalist;
+                let demo = respData.datalist[0].products;
+                this.selectedKeyword = respData.datalist[0].keyword;
+                respData.datalist[0].category_filter.brand.forEach(element => {
                   if (this.requestBody.brand.includes(element)) {
                     this.brandList.push({ isSelected: true, name: element })
                   } else {
                     this.brandList.push({ isSelected: false, name: element })
                   }
-
                 });
-                data.dataset[0].category_filter.dept.forEach(element => {
+                respData.datalist[0].category_filter.dept.forEach(element => {
                   if (this.requestBody.dept.includes(element)) {
                     this.deptList.push({ isSelected: true, name: element })
                   } else {
                     this.deptList.push({ isSelected: false, name: element })
                   }
-
                 });
-                data.dataset[0].category_filter.type.forEach(element => {
+                respData.datalist[0].category_filter.type.forEach(element => {
                   if (this.requestBody.type.includes(element)) {
                     this.typeList.push({ isSelected: true, name: element })
                   } else {
                     this.typeList.push({ isSelected: false, name: element })
                   }
                 });
-                data.dataset[0].category_filter.subtype.forEach(element => {
+                respData.datalist[0].category_filter.subtype.forEach(element => {
                   if (this.requestBody.subtype.includes(element)) {
                     this.subTypeList.push({ isSelected: true, name: element })
                   } else {
@@ -516,77 +408,56 @@ cardDoubleClick(keyword): void {
                   element.image_url = 'https://www.mastgeneralstore.com/' + element.image_url;
                   element["pinned"] = false;
                 });
-              },
-              error: error => {
-                console.log(error);
-
-              }
-            })
+              }).catch((error) => { console.log(error) });
           }
         }
 
       }, 1000);
-
-
-
-    } else {
-
     }
   }
 
   updateSorting(item) {
-    console.log(item);
     let selectedItem;
-this.sortingListL.forEach(element => {
-  console.log(element.sorting_id);
-  if(element.sorting_id == item) {
-    selectedItem = element
-  }
-});
-   console.log(selectedItem);
-   
-    
-    console.log("in sorting");
+    this.sortingListL.forEach(element => {
+      if (element.sorting_id == item) {
+        selectedItem = element
+      }
+    });
     this.productList = [];
     this.requestBody.sorting_label = selectedItem.sorting_felid + ':' + selectedItem.sorting_label;
-    console.log(this.selectedSorting);
-
     if (this.requestBody.query == '') {
-      this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
-        next: data => {
-          this.serverRes = data.dataset;
-          data.dataset[0].category_filter.brand.forEach(element => {
+      this.auth.sendHttpPost('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', this.requestBody)
+        .then((respData) => {
+          this.serverRes = respData.datalist;
+          respData.datalist[0].category_filter.brand.forEach(element => {
             if (this.requestBody.brand.includes(element)) {
               this.brandList.push({ isSelected: true, name: element })
             } else {
               this.brandList.push({ isSelected: false, name: element })
             }
-
           });
-          data.dataset[0].category_filter.dept.forEach(element => {
+          respData.datalist[0].category_filter.dept.forEach(element => {
             if (this.requestBody.dept.includes(element)) {
               this.deptList.push({ isSelected: true, name: element })
             } else {
               this.deptList.push({ isSelected: false, name: element })
             }
-
           });
-          data.dataset[0].category_filter.type.forEach(element => {
+          respData.datalist[0].category_filter.type.forEach(element => {
             if (this.requestBody.type.includes(element)) {
               this.typeList.push({ isSelected: true, name: element })
             } else {
               this.typeList.push({ isSelected: false, name: element })
             }
           });
-          data.dataset[0].category_filter.subtype.forEach(element => {
+          respData.datalist[0].category_filter.subtype.forEach(element => {
             if (this.requestBody.subtype.includes(element)) {
               this.subTypeList.push({ isSelected: true, name: element })
             } else {
               this.subTypeList.push({ isSelected: false, name: element })
             }
           });
-          let demo = data.dataset[0].products;
-
+          let demo = respData.datalist[0].products;
           const arrayUniqueByKey: any = [...new Map(demo.map(item =>
             [item['product_id'], item])).values()];
           this.productList = arrayUniqueByKey;
@@ -594,22 +465,13 @@ this.sortingListL.forEach(element => {
             element.image_url = 'https://www.mastgeneralstore.com/' + element.image_url;
             element["pinned"] = false;
           });
-        },
-        error: error => {
-          console.log(error);
-
-        }
-      })
+        }).catch((error) => { console.log(error) });
     } else {
-      
-      this.http.post<any>('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', { response: this.requestBody }).subscribe({
-        next: data => {
-          this.serverRes = data.dataset;
+      this.auth.sendHttpPost('http://127.0.0.1:8000/console/' + this.orgId + '/site_search/site_setting/' + '1' + '/' + '100', this.requestBody)
+        .then((respData) => {
+          this.serverRes = respData.datalist;
           this.serverRes.forEach(element => {
-
-
             if (element.keyword == this.selectedKeyword) {
-              console.log(element);
               let demo = element.products;
               element.category_filter.brand.forEach(element => {
                 if (this.requestBody.brand.includes(element)) {
@@ -617,7 +479,6 @@ this.sortingListL.forEach(element => {
                 } else {
                   this.brandList.push({ isSelected: false, name: element })
                 }
-
               });
               element.category_filter.dept.forEach(element => {
                 if (this.requestBody.dept.includes(element)) {
@@ -625,7 +486,6 @@ this.sortingListL.forEach(element => {
                 } else {
                   this.deptList.push({ isSelected: false, name: element })
                 }
-
               });
               element.category_filter.type.forEach(element => {
                 if (this.requestBody.type.includes(element)) {
@@ -644,27 +504,17 @@ this.sortingListL.forEach(element => {
               const arrayUniqueByKey: any = [...new Map(demo.map(item =>
                 [item['product_id'], item])).values()];
               this.productList = arrayUniqueByKey;
-              console.log("product list", this.productList);
-
               this.productList.forEach(el => {
                 if (el.image_url.startsWith("https")) {
                 } else {
                   el.image_url = 'https://www.mastgeneralstore.com/' + el.image_url;
                 }
-
                 el["pinned"] = false;
               });
             }
           });
-        },
-        error: error => {
-          console.log(error);
-
-        }
-      })
+        }).catch((error) => { console.log(error) });
     }
-
-
   }
 
   changeByKeyword(keyword) {
@@ -672,19 +522,15 @@ this.sortingListL.forEach(element => {
     this.selectedKeyword = keyword;
     this.serverRes.forEach(element => {
       if (element.keyword == keyword) {
-        console.log(element);
         let demo = element.products;
         const arrayUniqueByKey: any = [...new Map(demo.map(item =>
           [item['product_id'], item])).values()];
         this.searchedProductList = arrayUniqueByKey;
-        console.log("product list", this.productList);
-
         this.searchedProductList.forEach(el => {
           if (el.image_url.startsWith("https")) {
           } else {
             el.image_url = 'https://www.mastgeneralstore.com/' + el.image_url;
           }
-
           el["pinned"] = false;
         });
       }
@@ -710,8 +556,6 @@ this.sortingListL.forEach(element => {
     setTimeout(() => {
       this.getProductList();
     }, 500);
-    console.log(this.requestBody);
-
   }
   filterDept(e, item) {
     this.deptList.forEach(element => {
@@ -730,7 +574,6 @@ this.sortingListL.forEach(element => {
     setTimeout(() => {
       this.getProductList();
     }, 500);
-    console.log(this.requestBody);
   }
 
   filterType(e, item) {
@@ -750,7 +593,6 @@ this.sortingListL.forEach(element => {
     setTimeout(() => {
       this.getProductList();
     }, 500);
-    console.log(this.requestBody);
   }
   filterSubType(e, item) {
     this.subTypeList.forEach(element => {
@@ -769,7 +611,6 @@ this.sortingListL.forEach(element => {
     setTimeout(() => {
       this.getProductList();
     }, 500);
-    console.log(this.requestBody);
   }
 
   selectBrand() {
@@ -825,16 +666,11 @@ this.sortingListL.forEach(element => {
         element.isSelected = false;
       });
     }
-    console.log(this.requestBody);
     this.getProductList();
   }
 
   drop(event: CdkDragDrop<string[]>, product, index) {
-    console.log(event);
-    console.log(product);
-    console.log(index);
     moveItemInArray(this.productList, event.previousIndex, event.currentIndex);
-    console.log(this.productList);
     let productsToBesend = [];
     let pinnedProducts = [];
     setTimeout(() => {
@@ -844,9 +680,6 @@ this.sortingListL.forEach(element => {
           pinnedProducts.push(element.product_id);
         }
       });
-      console.log(productsToBesend);
-      console.log(pinnedProducts);
-
       let data = {
         response: {
           data_tables: [
@@ -870,10 +703,8 @@ this.sortingListL.forEach(element => {
   }
 
   saveSequence() {
-    this.spinner.show();
     let productsToBesend = [];
     let pinnedProducts = [];
-
     this.productList.forEach(element => {
       productsToBesend.push(element.product_id);
       if (element.pinned) {
@@ -883,7 +714,6 @@ this.sortingListL.forEach(element => {
 
     setTimeout(() => {
       let data = {
-
         data_tables: [
           {
             table_name: "tb_search_query_boost",
@@ -901,19 +731,10 @@ this.sortingListL.forEach(element => {
             }
           }
         ]
-
       }
-      console.log(data);
-      this.http.post<any>('http://127.0.0.1:8000/console/search_query_booster', { response: data }).subscribe({
-        next: data => {
-          console.log(data);
-          this.spinner.hide();
-        },
-        error: error => {
-          // console.log(error);
 
-        }
-      })
+      this.auth.sendHttpPost('http://127.0.0.1:8000/console/search_query_booster', data)
+        .then((respData) => { }).catch((error) => { console.log(error) });
     }, 500);
 
   }
@@ -923,7 +744,7 @@ this.sortingListL.forEach(element => {
   }
 
   public getUsers(): void {
-    this.users = null; //for show spinner each time
+    this.users = null;
     this.usersService.getUsers().subscribe(users => this.users = users);
   }
   public addUser(user: User) {
@@ -936,39 +757,20 @@ this.sortingListL.forEach(element => {
     this.usersService.deleteUser(user.id).subscribe(user => this.getUsers());
   }
 
-
   public onPageChanged(event) {
     this.page = event;
     this.getUsers();
     window.scrollTo(0, 0);
-    // if(this.settings.fixedHeader){      
-    //     document.getElementById('main-content').scrollTop = 0;
-    // }
-    // else{
-    //     document.getElementsByClassName('mat-drawer-content')[0].scrollTop = 0;
-    // }
   }
 
   public openUserDialog() {
     this.isOpen = !this.isOpen;
-    // let dialogRef = this.dialog.open(UserDialogComponent, {
-    //   data: user,
-    //   panelClass: 'Abc',
-    // });
-
-    // dialogRef.afterClosed().subscribe(user => {
-    //   if (user) {
-    //     (user.id) ? this.updateUser(user) : this.addUser(user);
-    //   }
-    // });
   }
 
   public openUserDialogbox(userbox) {
     var dialogRef = this.dialog.open(UserDialogComponent, {
       panelClass: 'custom-modalbox !important',
       height: '200px !important',
-
-
     });
   }
 

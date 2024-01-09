@@ -5,6 +5,7 @@ import { AppSettings, Settings } from 'src/app/app.settings';
 import { CreateOrgnizationComponent } from '../create-orgnization/create-orgnization.component';
 import { HttpClient } from '@angular/common/http';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { AuthService } from 'src/app/shared/services/auth.service';
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -29,7 +30,9 @@ export class OrdersComponent implements OnInit {
   public count = 6;
   public settings:Settings;
   orgnizationData: any;
-  constructor( public dialog: MatDialog, public appSettings:AppSettings ,private http: HttpClient) {
+  constructor( public dialog: MatDialog, public appSettings:AppSettings ,
+    private auth: AuthService,
+    private http: HttpClient) {
     this.settings = this.appSettings.settings;
    }
 
@@ -60,26 +63,18 @@ export class OrdersComponent implements OnInit {
     });
   }
   getOrgdata() {
-    this.http.get<any>('http://127.0.0.1:8000/console/all_organization_data').subscribe({
-      next: data => {
-
-
-        let tempData =  data.dataset;
-        tempData.forEach((val)=>{
-            // console.log(val)
-          if(val.status == "false"){
-            val.status = false
-          }else{
-            val.status = true;
-          }
-        })
-       this.orgnizationData = tempData;
-      },
-      error: error => {
-        console.log(error);
-
-      }
-    })
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/all_organization_data')
+    .then((respData) => {
+      let tempData =  respData.datalist;
+      tempData.forEach((val)=>{
+        if(val.status == "false"){
+          val.status = false
+        }else{
+          val.status = true;
+        }
+      })
+     this.orgnizationData = tempData;
+    }).catch((error) => { console.log(error) });
   }
 
   changeStatus(setting) {
