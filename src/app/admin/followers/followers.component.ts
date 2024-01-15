@@ -7,6 +7,7 @@ import { HttpClient } from "@angular/common/http";
 import { customers } from "../dashboard/dashboard.data";
 import * as moment from "moment";
 import { ClickStreamService } from "src/app/shared/services/click-stream.service";
+import { AuthService } from "src/app/shared/services/auth.service";
 
 interface Food {
   value: string;
@@ -130,7 +131,7 @@ export class FollowersComponent implements OnInit {
   serverResInteractions: any;
 
   viewes_summery: any = [];
-  constructor(private http: HttpClient ,private clickService: ClickStreamService) {
+  constructor(private http: HttpClient, private clickService: ClickStreamService, private auth: AuthService,) {
     Object.assign(this, { refunds });
     Object.assign(this, { sales_summary });
   }
@@ -147,17 +148,10 @@ export class FollowersComponent implements OnInit {
   }
 
   geProfileList() {
-    this.http
-      .get<any>("http://127.0.0.1:8000/console/dashboard/recommendation_type")
-      .subscribe({
-        next: (data) => {
-          console.log(data);
-          this.proFiles = data.dataset;
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/dashboard/recommendation_type')
+      .then((respData) => {
+        this.proFiles = respData.datalist;
+      }).catch((error) => { console.log(error) });
   }
 
   dateChanged($event) {
@@ -166,124 +160,44 @@ export class FollowersComponent implements OnInit {
 
   getData() {
     this.viewes_summery = [];
-    this.http
-      .get<any>(
-        "http://127.0.0.1:8000/console/"+this.clickService.getAdminOrgId()+"/dashboard/get_recommendation_activity_profile/" +
-          this.selectedProfile +
-          "/" +
-          this.selectedDay
-      )
-      .subscribe({
-        next: (data) => {
-          console.log(data);
-          // let data = {
-          //   status: 200,
-          //   status_message: "action performed successfully",
-          //   dataset: {
-          //     Details: {
-          //       Recommendations: {
-          //         total: 5,
-          //         Logged_user: 0,
-          //         anonymous_user: 5,
-          //       },
-          //       Estimated_product_viewed: {
-          //         total: 3,
-          //         Logged_user: 0,
-          //         anonymous_user: 3,
-          //       },
-          //       Estimated_purchase_count: {
-          //         total: 2,
-          //         Logged_user: 0,
-          //         anonymous_user: 2,
-          //       },
-          //       CTA: 0.6,
-          //       conversion_rate: 0.67,
-          //     },
-          //     Number_of_Interactions: {
-          //       Views: 3,
-          //       Purchased_items: 2,
-          //       Revenue: 96,
-          //     },
-          //   },
-          // };
-          this.serverRes = data.dataset.Details;
-          this.serverResInteractions = data.dataset.Number_of_Interactions;
-          this.recPer = this.serverRes.Recommendations.total;
-          if(this.serverRes.Recommendations.total === 0) {
-            this.clickedPer = 0
-          }
-          else {
-            this.clickedPer = (this.serverRes.Estimated_product_viewed.total / this.serverRes.Recommendations.total)*100;
-          }
-          if(this.serverResInteractions.Purchased_items === 0) {
-            this.purchasedPer = 0
-          }
-          else {
-            this.purchasedPer = (this.serverRes.Estimated_purchase_count.total / this.serverResInteractions.Purchased_items)*100;
-          }
-          
-        
-          this.recPerTitle = this.recPer + " " + "views";
-          this.clickedPerTitle = this.clickedPer.toFixed(2) + "%";
-          this.purchasedPerTitle = this.purchasedPer.toFixed(2) + "%";
+    this.auth.sendHttpGet("http://127.0.0.1:8000/console/" + this.clickService.getAdminOrgId() + "/dashboard/get_recommendation_activity_profile/" +
+      this.selectedProfile +
+      "/" +
+      this.selectedDay)
+      .then((respData) => {
+        this.serverRes = respData.datalist;
+        this.serverResInteractions = respData.datalist.Number_of_Interactions;
+        this.recPer = this.serverRes.Recommendations.total;
+        if (this.serverRes.Recommendations.total === 0) {
+          this.clickedPer = 0
+        }
+        else {
+          this.clickedPer = (this.serverRes.Estimated_product_viewed.total / this.serverRes.Recommendations.total) * 100;
+        }
+        if (this.serverResInteractions.Purchased_items === 0) {
+          this.purchasedPer = 0
+        }
+        else {
+          this.purchasedPer = (this.serverRes.Estimated_purchase_count.total / this.serverResInteractions.Purchased_items) * 100;
+        }
 
-          // this.serverRes = data.dataset.Details;
-          // console.log(this.serverRes.Recommendations.total);
-          // this.serverResInteractions = data.dataset.Number_of_Interactions;
-          // this.recPer = this.serverRes.Recommendations.total * this.serverRes.CTA * 100;
-          // this.clickedPer = this.serverRes.Estimated_product_viewed.total * this.serverRes.CTA * 100;
-          // this.purchasedPer = this.serverRes.Estimated_purchase_count.total * this.serverRes.CTA * this.serverRes.conversion_rate * 100;
-          // console.log(this.recPer);
-          // console.log(this.clickedPer);
-          // console.log(this.purchasedPer);
-          // this.recPerTitle = this.recPer + "%";
-          // this.clickedPerTitle = this.clickedPer + "%";
-          // this.purchasedPerTitle = this.purchasedPer + "%";
-          
-          // if (this.serverRes.Recommendations.total === 0) {
-          //   this.recPer = 0;
-          //   this.clickedPer = 0;
-          //   this.purchasedPer = 0;
-          //   this.recPerTitle = this.recPer + "%";
 
-          //   this.clickedPerTitle = this.clickedPer + "%";
-  
-          //   this.purchasedPerTitle = this.purchasedPer + "%";
-          // } else {
-          //   this.recPer = 100;
-          //   this.clickedPer =
-          //     (this.serverRes.Estimated_product_viewed.total /
-          //       this.serverRes.Recommendations.total) *
-          //     100;
-          //   this.purchasedPer =
-          //     (this.serverRes.Estimated_purchase_count.total /
-          //       this.serverRes.Estimated_product_viewed.total) *
-          //     100;
-          //     this.recPerTitle = this.recPer + "%";
+        this.recPerTitle = this.recPer + " " + "views";
+        this.clickedPerTitle = this.clickedPer.toFixed(2) + "%";
+        this.purchasedPerTitle = this.purchasedPer.toFixed(2) + "%";
+        if (respData.datalist.Views_on_days != null) {
+          respData.datalist.Views_on_days.forEach((element) => {
+            const date = moment(element.Date);
+            console.log(date.format("DD-MM-YYYY"));
 
-          //     this.clickedPerTitle = this.clickedPer.toFixed(2) + "%";
-    
-          //     this.purchasedPerTitle = this.purchasedPer.toFixed(2) + "%";
-          // }
-
-        
-
-          if (data.dataset.Views_on_days != null) {
-            data.dataset.Views_on_days.forEach((element) => {
-              const date = moment(element.Date);
-              console.log(date.format("DD-MM-YYYY"));
-
-              this.viewes_summery.push({
-                name: date.format("DD-MM-YYYY"),
-                value: element.Views,
-              });
+            this.viewes_summery.push({
+              name: date.format("DD-MM-YYYY"),
+              value: element.Views,
             });
-          }
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+          });
+        }
+      }).catch((error) => { console.log(error) });
+
   }
 }
 

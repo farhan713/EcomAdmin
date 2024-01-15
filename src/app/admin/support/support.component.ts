@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { ClickStreamService } from 'src/app/shared/services/click-stream.service';
 
 @Component({
@@ -37,7 +38,7 @@ export class SupportComponent implements OnInit {
   // public page: any;
   // public count = 6;
 
-  constructor(public dialog: MatDialog ,private http: HttpClient ,private clickService: ClickStreamService) { }
+  constructor(public dialog: MatDialog, private auth: AuthService, private http: HttpClient, private clickService: ClickStreamService) { }
 
   ngOnInit(): void {
     this.getRecomandationData(0);
@@ -68,16 +69,20 @@ export class SupportComponent implements OnInit {
   // }
 
   getRecomandationData(day) {
-    this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/queries_summary_breakdown/' + day  ).subscribe({
-      next: data => {
-      console.log(data ,"hii")   
-      this.data = data.dataset;
-      },
-      error: error => {
-        console.log(error);
-  
-      }
-    })
+    // this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/queries_summary_breakdown/' + day  ).subscribe({
+    //   next: data => {
+    //   console.log(data ,"hii")   
+    //   this.data = data.dataset;
+    //   },
+    //   error: error => {
+    //     console.log(error);
+
+    //   }
+    // })
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/' + this.clickService.getAdminOrgId() + '/queries_summary_breakdown/' + day)
+      .then((respData) => {
+        this.data = respData.datalist;
+      }).catch((error) => { console.log(error) });
   }
 
 }

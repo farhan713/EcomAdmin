@@ -8,6 +8,7 @@ import { AppSettings, Settings } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
 import { log } from 'console';
 import { ClickStreamService } from 'src/app/shared/services/click-stream.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-customers',
@@ -25,7 +26,7 @@ export class CustomersComponent implements OnInit {
   public page: any;
   public count = 6;
   public settings: Settings;
-  constructor(public appService: AppService, public dialog: MatDialog, public appSettings: AppSettings, private http: HttpClient, private clickService: ClickStreamService) {
+  constructor(public appService: AppService, private auth: AuthService, public dialog: MatDialog, public appSettings: AppSettings, private http: HttpClient, private clickService: ClickStreamService) {
     this.settings = this.appSettings.settings;
   }
 
@@ -49,7 +50,7 @@ export class CustomersComponent implements OnInit {
       direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
     dialogRef.afterClosed().subscribe(customer => {
-      if(customer){
+      if (customer) {
         this.synonyms_getcall();
         location.reload();
       }
@@ -67,21 +68,27 @@ export class CustomersComponent implements OnInit {
     });
   }
   public synonyms_getcall() {
-    this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/dashboard/search_synonyms_all/' + '1').subscribe({
-      next: data => {
-        this.synonymsData = data;
-        console.log(this.synonymsData);
-        // this.synonymsData.forEach((element) => {
-        //   if (element.status == 'Active') {
-        //     element['isChecked'] = true;
-        //   } else {
-        //     element['isChecked'] = false;
-        //   }
+    // this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/dashboard/search_synonyms_all/' + '1').subscribe({
+    //   next: data => {
+    //     this.synonymsData = data;
+    //     console.log(this.synonymsData);
+    //     // this.synonymsData.forEach((element) => {
+    //     //   if (element.status == 'Active') {
+    //     //     element['isChecked'] = true;
+    //     //   } else {
+    //     //     element['isChecked'] = false;
+    //     //   }
 
-        // });
+    //     // });
+    //     console.log(this.synonymsData, "checked");
+    //   }
+    // });
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/' + this.clickService.getAdminOrgId() + '/dashboard/search_synonyms_all/' + '1')
+      .then((respData) => {
+        this.synonymsData = respData.datalist;
+        console.log(this.synonymsData);
         console.log(this.synonymsData, "checked");
-      }
-    });
+      }).catch((error) => { console.log(error) });
   }
   public remove(Synonym: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -100,10 +107,10 @@ export class CustomersComponent implements OnInit {
       // } 
       if (dialogResult) {
         let deleteId = Synonym.synonyms_id;
-        this.http.delete<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/dashboard/search_synonyms_one/' + deleteId).subscribe({
+        this.http.delete<any>('http://127.0.0.1:8000/console/' + this.clickService.getAdminOrgId() + '/dashboard/search_synonyms_one/' + deleteId).subscribe({
           next: data => {
             this.synonyms_getcall();
-           location.reload();
+            location.reload();
           },
           error: error => {
             console.log(error);
@@ -116,11 +123,11 @@ export class CustomersComponent implements OnInit {
     });
   }
   changeStatus(Synonym) {
-    let status ;
-    if(Synonym.status == true){
-       status = "false";
-     
-    }else{
+    let status;
+    if (Synonym.status == true) {
+      status = "false";
+
+    } else {
       status = "true";
     }
     let data = {
@@ -142,16 +149,22 @@ export class CustomersComponent implements OnInit {
         }
       ]
     }
-    this.http.post<any>('http://127.0.0.1:8000/console/dashboard/search_synonyms_update', { response: data }).subscribe({
-      next: data => {
-        this.synonyms_getcall();
-         location.reload();
-      },
-      error: error => {
-        console.log(error);
+    // this.http.post<any>('http://127.0.0.1:8000/console/dashboard/search_synonyms_update', { response: data }).subscribe({
+    //   next: data => {
+    //     this.synonyms_getcall();
+    //     location.reload();
+    //   },
+    //   error: error => {
+    //     console.log(error);
 
-      }
-    })
+    //   }
+    // })
+    this.auth.sendHttpPost('http://127.0.0.1:8000/console/dashboard/search_synonyms_update', data)
+      .then((respData) => {
+        this.synonyms_getcall();
+        location.reload();
+
+      }).catch((error) => { console.log(error) });
   }
 
 }

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title *ngIf="!isEdit">Add Orginization</h1> 
+<h1 mat-dialog-title *ngIf="!isEdit">Add Orginization</h1>
 <h1 mat-dialog-title *ngIf="isEdit">Edit Orginization</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
     <div mat-dialog-content>
@@ -47,22 +47,28 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Orginization Name</mat-label>
                     <input matInput formControlName="org_name" required>
-                    <mat-error *ngIf="form.controls.org_name.errors?.required">Orginization Name is required</mat-error> 
+                    <mat-error *ngIf="form.controls.org_name.errors?.required">Orginization Name is required</mat-error>
                 </mat-form-field>
             </div>
-           
+
             <div fxFlex.gt-sm="50" class="widthwrap">
-                <mat-form-field appearance="outline" class="w-100">
+                <!-- <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Website Url Name</mat-label>
                     <input matInput formControlName="org_url" required>
                     <mat-error *ngIf="form.controls.org_url.errors?.required">Domain Name is required</mat-error> 
+                </mat-form-field> -->
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>email_id</mat-label>
+                    <input matInput formControlName="email_id" required>
+                    <mat-error *ngIf="form.controls.email_id.errors?.required">Domain Name is required</mat-error>
                 </mat-form-field>
             </div>
             <div fxFlex.gt-sm="50" class="widthwrap">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>product_file_location</mat-label>
                     <input matInput formControlName="product_file_location" required>
-                    <mat-error *ngIf="form.controls.product_file_location.errors?.required">Domain Name is required</mat-error> 
+                    <mat-error *ngIf="form.controls.product_file_location.errors?.required">Domain Name is
+                        required</mat-error>
                 </mat-form-field>
             </div>
 
@@ -70,14 +76,14 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Product file Cron Time</mat-label>
                     <mat-select formControlName="product_file_cron_time" [(ngModel)]="selectedIntervalProdFile"
-                    (selectionChange)="onChangeOfCroneTimeProdFile()"
-                  >
-                    <mat-option value="">-</mat-option>
-                    <mat-option *ngFor="let item of croneTimeList" [value]="item.value">
-                     {{item.label}}
-                    </mat-option>
-                  </mat-select>
-                    <mat-error *ngIf="form.controls.product_file_cron_time.errors?.required">Domain Name is required</mat-error> 
+                        (selectionChange)="onChangeOfCroneTimeProdFile()">
+                        <mat-option value="">-</mat-option>
+                        <mat-option *ngFor="let item of croneTimeList" [value]="item.value">
+                            {{item.label}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls.product_file_cron_time.errors?.required">Domain Name is
+                        required</mat-error>
                 </mat-form-field>
             </div>
 
@@ -86,7 +92,8 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>trans_file_location</mat-label>
                     <input matInput formControlName="trans_file_location" required>
-                    <mat-error *ngIf="form.controls.trans_file_location.errors?.required">Domain Name is required</mat-error> 
+                    <mat-error *ngIf="form.controls.trans_file_location.errors?.required">Domain Name is
+                        required</mat-error>
                 </mat-form-field>
             </div>
 
@@ -96,25 +103,25 @@
                     <mat-label>Sales File cron Time</mat-label>
 
                     <mat-select formControlName="trans_file_cron_time" [(ngModel)]="selectedIntervalSalesFile"
-                    (selectionChange)="onChangeOfCroneTimeSalesFile()"
-                  >
-                    <mat-option value="">-</mat-option>
-                    <mat-option *ngFor="let item of croneTimeList" [value]="item.value">
-                     {{item.label}}
-                    </mat-option>
-                  </mat-select>
+                        (selectionChange)="onChangeOfCroneTimeSalesFile()">
+                        <mat-option value="">-</mat-option>
+                        <mat-option *ngFor="let item of croneTimeList" [value]="item.value">
+                            {{item.label}}
+                        </mat-option>
+                    </mat-select>
 
-                    <mat-error *ngIf="form.controls.trans_file_cron_time.errors?.required">Domain Name is required</mat-error> 
+                    <mat-error *ngIf="form.controls.trans_file_cron_time.errors?.required">Domain Name is
+                        required</mat-error>
                 </mat-form-field>
             </div>
 
 
             <div fxFlex.gt-sm="50" class="widthwrap">
-                <mat-form-field appearance="outline" class="w-100">
+                <!-- <mat-form-field appearance="outline" class="w-100">
                     <mat-label>email_id</mat-label>
                     <input matInput formControlName="email_id" required>
                     <mat-error *ngIf="form.controls.email_id.errors?.required">Domain Name is required</mat-error> 
-                </mat-form-field>
+                </mat-form-field> -->
             </div>
 
 
@@ -134,14 +141,14 @@
 
 
 
-         
+
         </div>
     </div>
     <div mat-dialog-actions>
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
             <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
             <button mat-raised-button color="primary" type="submit">Save</button>
-        </div> 
+        </div>
     </div>
 </form>
 

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { ClickStreamService } from 'src/app/shared/services/click-stream.service';
 
 @Component({
@@ -27,46 +28,50 @@ export class ProductListComponent implements OnInit {
   public count = 6;
   zeroSearchResult: any = [];
   days = [
-    1,7,15,30
+    1, 7, 15, 30
   ]
   selectedDay = 1;
-  constructor(public dialog: MatDialog, private http: HttpClient ,private clickService: ClickStreamService,) { }
+  constructor(public dialog: MatDialog, private auth: AuthService, private http: HttpClient, private clickService: ClickStreamService,) { }
 
   ngOnInit(): void {
     this.getZeroSearchResult();
   }
 
-  public onPageChanged(event){
-    this.page = event; 
-    window.scrollTo(0,0); 
+  public onPageChanged(event) {
+    this.page = event;
+    window.scrollTo(0, 0);
   }
 
-  public remove(follower:any){  
+  public remove(follower: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
         message: "Are you sure you want remove this follower?"
       }
-    }); 
-    dialogRef.afterClosed().subscribe(dialogResult => { 
-      if(dialogResult){
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
         const index: number = this.followers.indexOf(follower);
         if (index !== -1) {
-          this.followers.splice(index, 1);  
-        } 
-      } 
-    }); 
-  }
-
-  public getZeroSearchResult(){
-    this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/zero_search_queries/' + this.selectedDay).subscribe({
-      next: data => {
-        this.zeroSearchResult = data.dataset;
-        console.log(this.zeroSearchResult,"aniket code here");
-        
-    
+          this.followers.splice(index, 1);
+        }
       }
     });
+  }
+
+  public getZeroSearchResult() {
+    //   this.http.get<any>('http://127.0.0.1:8000/console/'+this.clickService.getAdminOrgId()+'/zero_search_queries/' + this.selectedDay).subscribe({
+    //     next: data => {
+    //       this.zeroSearchResult = data.dataset;
+    //       console.log(this.zeroSearchResult,"aniket code here");
+
+
+    //     }
+    //   });
+    this.auth.sendHttpGet('http://127.0.0.1:8000/console/' + this.clickService.getAdminOrgId() + '/zero_search_queries/' + this.selectedDay)
+      .then((respData) => {
+        this.zeroSearchResult = respData.datalist;
+      }).catch((error) => { console.log(error) });
   }
 }
